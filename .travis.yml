@@ -19,3 +19,4 @@ script:
   - 'cabal-1.20 configure'
   - 'cabal-1.20 build'
   - 'cabal-1.20 sdist'
+  - 'cabal-1.20 test'
