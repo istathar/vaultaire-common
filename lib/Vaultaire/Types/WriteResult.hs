@@ -17,8 +17,8 @@ module Vaultaire.Types.WriteResult
 ) where
 
 import Control.Exception (SomeException (..))
-import Vaultaire.Classes.WireFormat
 import Test.QuickCheck
+import Vaultaire.Classes.WireFormat
 
 data WriteResult = InvalidWriteOrigin | OnDisk
   deriving (Show, Eq)

@@ -12,10 +12,10 @@ module Vaultaire.Types.PassThrough
     PassThrough(..)
 ) where
 
-import Data.ByteString (ByteString, pack)
-import Vaultaire.Classes.WireFormat
-import Test.QuickCheck
 import Control.Applicative
+import Data.ByteString (ByteString, pack)
+import Test.QuickCheck
+import Vaultaire.Classes.WireFormat
 
 newtype PassThrough = PassThrough { unPassThrough :: ByteString }
   deriving (Eq, Show)

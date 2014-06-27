@@ -23,6 +23,7 @@ module Vaultaire.Types.SourceDict
 import Blaze.ByteString.Builder (fromByteString, toByteString)
 import Blaze.ByteString.Builder.Char8 (fromChar)
 import Control.Applicative (many, optional, (<$>), (<*), (<*>))
+import Control.Arrow ((***))
 import Control.Exception (SomeException (..))
 import Data.Attoparsec.Text (parseOnly)
 import qualified Data.Attoparsec.Text as PT
@@ -32,9 +33,8 @@ import Data.Maybe (isNothing)
 import Data.Monoid (Monoid, mempty, (<>))
 import Data.Text (Text, find, pack)
 import Data.Text.Encoding (decodeUtf8', encodeUtf8)
-import Vaultaire.Classes.WireFormat
 import Test.QuickCheck
-import Control.Arrow ((***))
+import Vaultaire.Classes.WireFormat
 
 newtype SourceDict = SourceDict { unSourceDict :: HashMap Text Text }
   deriving (Show, Eq, Monoid)

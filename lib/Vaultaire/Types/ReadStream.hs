@@ -18,12 +18,12 @@ module Vaultaire.Types.ReadStream
     SimpleBurst(..),
 ) where
 
+import Control.Applicative
 import Control.Exception (SomeException (..))
 import Data.ByteString (ByteString)
 import qualified Data.ByteString as S
-import Vaultaire.Classes.WireFormat
 import Test.QuickCheck
-import Control.Applicative
+import Vaultaire.Classes.WireFormat
 
 newtype ExtendedBurst = ExtendedBurst { unExtendedBurst :: ByteString }
   deriving (Show, Eq)

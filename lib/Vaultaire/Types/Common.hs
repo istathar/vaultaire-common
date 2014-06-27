@@ -20,18 +20,18 @@ module Vaultaire.Types.Common
     DayMap
 ) where
 
+import Control.Applicative
 import Control.Exception (Exception, SomeException (..))
 import Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as S
 import Data.Char
 import Data.Hashable (Hashable)
+import Data.Locator
 import Data.Map (Map)
 import Data.String (IsString)
 import Data.Typeable (Typeable)
 import Data.Word (Word64)
 import Test.QuickCheck
-import Control.Applicative
-import Data.Locator
 
 newtype Origin = Origin { unOrigin :: ByteString }
     deriving (Eq, Ord, IsString, Hashable, Show)

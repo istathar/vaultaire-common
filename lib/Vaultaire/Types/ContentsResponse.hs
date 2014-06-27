@@ -22,10 +22,10 @@ import Control.Exception (SomeException (..))
 import qualified Data.ByteString as S
 import Data.Packer (getBytes, getWord64LE, putBytes, putWord64LE, putWord8,
                     runPacking, runUnpacking)
+import Test.QuickCheck
 import Vaultaire.Classes.WireFormat
 import Vaultaire.Types.Address
 import Vaultaire.Types.SourceDict
-import Test.QuickCheck
 
 data ContentsResponse = RandomAddress Address
                       | InvalidContentsOrigin

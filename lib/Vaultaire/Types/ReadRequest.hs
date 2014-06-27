@@ -14,17 +14,17 @@ module Vaultaire.Types.ReadRequest
     ReadRequest(..),
 ) where
 
+import Control.Applicative
 import Control.Exception
 import Data.ByteString (ByteString)
 import qualified Data.ByteString as S
 import Data.Packer (getBytes, getWord64LE, getWord8, putBytes, putWord64LE,
                     putWord8, runPacking, tryUnpacking)
 import Data.Word (Word8)
+import Test.QuickCheck
 import Vaultaire.Classes.WireFormat
 import Vaultaire.Types.Address
 import Vaultaire.Types.Common
-import Test.QuickCheck
-import Control.Applicative
 
 data ReadRequest = SimpleReadRequest Address Time Time
                  | ExtendedReadRequest Address Time Time

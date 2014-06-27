@@ -21,10 +21,10 @@ import Control.Applicative ((<$>), (<*>))
 import qualified Data.ByteString as S
 import Data.Packer (getBytes, getWord64LE, getWord8, putBytes, putWord64LE,
                     putWord8, runPacking, tryUnpacking)
+import Test.QuickCheck
 import Vaultaire.Classes.WireFormat
 import Vaultaire.Types.Address
 import Vaultaire.Types.SourceDict (SourceDict)
-import Test.QuickCheck
 
 data ContentsOperation = ContentsListRequest
                        | GenerateNewAddress
