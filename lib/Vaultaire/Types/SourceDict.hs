@@ -43,7 +43,7 @@ makeSourceDict :: HashMap Text Text -> Either String SourceDict
 makeSourceDict hm = if foldlWithKey' allGoodKV True hm
                     then Right $ SourceDict hm
                     else Left "Bad character in source dict,\
-                              \ no ',', or ':' allowed."
+                              \ no ',' or ':' allowed."
   where allGoodKV acc k v = acc && (allGoodChars k && allGoodChars v)
         allGoodChars = isNothing . find (\c -> c == ':' || c == ',')
 
