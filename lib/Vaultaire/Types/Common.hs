@@ -17,7 +17,7 @@ module Vaultaire.Types.Common
     Epoch,
     NumBuckets,
     Time,
-    DayMap
+    DayMap(..)
 ) where
 
 import Control.Applicative
@@ -28,6 +28,9 @@ import Data.Char
 import Data.Hashable (Hashable)
 import Data.Locator
 import Data.Map (Map)
+import Data.List
+import qualified Data.Map.Strict as Map
+import Data.Monoid
 import Data.String (IsString)
 import Data.Typeable (Typeable)
 import Data.Word (Word64)
@@ -59,4 +62,10 @@ type Epoch = Word64
 type NumBuckets = Word64
 
 type Time = Word64
-type DayMap = Map Epoch NumBuckets
+
+newtype DayMap = DayMap { unDayMap :: Map Epoch NumBuckets }
+    deriving (Monoid)
+
+instance Show DayMap where
+    show (DayMap m) = intercalate "\n" $ map (\(k,v) -> show k ++ "," ++ show v) $ Map.toAscList m
+

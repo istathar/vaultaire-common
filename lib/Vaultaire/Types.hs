@@ -53,7 +53,7 @@ module Vaultaire.Types
     -- * Convenience/clarity
     Epoch,
     NumBuckets,
-    DayMap,
+    DayMap(..),
     Time,
 ) where
 

@@ -1,5 +1,5 @@
 all:
-	true
+	cabal build
 
 SOURCES=$(shell find lib -name '*.hs' -type f)
 
