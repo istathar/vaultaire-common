@@ -25,6 +25,7 @@ main = hspec suite
 suite :: Spec
 suite = do
     describe "WireFormat identity tests" $ do
+        prop "Daymap" (wireId :: DayMap -> Bool)
         prop "ContentsOperation" (wireId :: ContentsOperation -> Bool)
         prop "ContentsResponse" (wireId :: ContentsResponse -> Bool)
         prop "WriteResult" (wireId :: WriteResult -> Bool)

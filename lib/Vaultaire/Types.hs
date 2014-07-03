@@ -50,10 +50,12 @@ module Vaultaire.Types
     -- * Conversion to and from wire format
     WireFormat(fromWire, toWire),
 
+    -- * Internal
+    DayMap(..),
+
     -- * Convenience/clarity
     Epoch,
     NumBuckets,
-    DayMap(..),
     Time,
 ) where
 
@@ -63,6 +65,7 @@ import Vaultaire.Types.Common
 import Vaultaire.Types.ContentsListBypass
 import Vaultaire.Types.ContentsOperation
 import Vaultaire.Types.ContentsResponse
+import Vaultaire.Types.DayMap
 import Vaultaire.Types.PassThrough
 import Vaultaire.Types.ReadRequest
 import Vaultaire.Types.ReadStream
