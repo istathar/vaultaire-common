@@ -19,6 +19,7 @@ import Control.Exception
 import Control.Monad
 import Data.ByteString (ByteString)
 import qualified Data.ByteString as S
+import Data.List
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Monoid
@@ -32,8 +33,10 @@ newtype DayMap = DayMap { unDayMap :: Map Epoch NumBuckets }
     deriving (Monoid, Eq)
 
 instance Show DayMap where
-    show = let f k v acc = acc ++ show k ++ ", " ++ show v ++ "\n"
-           in Map.foldrWithKey f "Day map:\n" . unDayMap
+    show = intercalate "\n"
+         . map (\(k,v) -> show k ++ "," ++ show v)
+         . Map.toAscList
+         . unDayMap
 
 instance Arbitrary DayMap where
     -- Valid first entry followed by whatever
