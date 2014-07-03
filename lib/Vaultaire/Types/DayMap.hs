@@ -14,18 +14,18 @@ module Vaultaire.Types.DayMap
     DayMap(..)
 ) where
 
+import Control.Applicative
+import Control.Exception
+import Control.Monad
+import Data.ByteString (ByteString)
+import qualified Data.ByteString as S
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Monoid
-import Vaultaire.Types.Common
-import Vaultaire.Classes.WireFormat
-import qualified Data.ByteString as S
-import Data.ByteString(ByteString)
 import Data.Packer
-import Control.Exception
-import Control.Applicative
-import Control.Monad
 import Test.QuickCheck
+import Vaultaire.Classes.WireFormat
+import Vaultaire.Types.Common
 
 
 newtype DayMap = DayMap { unDayMap :: Map Epoch NumBuckets }
@@ -59,7 +59,7 @@ instance WireFormat DayMap where
             runPacking (Map.size m * 16) $
                 forM_ (Map.toAscList m)
                       (\(k,v) -> putWord64LE k >> putWord64LE v)
-        
+
 
 mustLoadDayMap :: ByteString -> DayMap
 mustLoadDayMap =
