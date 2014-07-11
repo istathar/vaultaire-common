@@ -28,6 +28,7 @@ module Vaultaire.Types
     SourceDict,
     unionSource,
     diffSource,
+    lookupSource,
     makeSourceDict,
 
     -- * Operations with the contents store
