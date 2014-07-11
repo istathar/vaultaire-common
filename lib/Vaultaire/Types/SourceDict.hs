@@ -17,7 +17,8 @@ module Vaultaire.Types.SourceDict
     SourceDict,
     unionSource,
     diffSource,
-    makeSourceDict,
+    lookupSource,
+    makeSourceDict
 ) where
 
 import Blaze.ByteString.Builder (fromByteString, toByteString)
@@ -28,7 +29,8 @@ import Control.Exception (SomeException (..))
 import Data.Attoparsec.Text (parseOnly)
 import qualified Data.Attoparsec.Text as PT
 import Data.HashMap.Strict (HashMap, difference, foldlWithKey', fromList,
-                            union)
+                            union, lookup)
+import Prelude hiding (lookup)
 import Data.Maybe (isNothing)
 import Data.Monoid (Monoid, mempty, (<>))
 import Data.Text (Text, find, pack)
@@ -74,3 +76,6 @@ unionSource (SourceDict a) (SourceDict b) = SourceDict $ union a b
 
 diffSource :: SourceDict -> SourceDict -> SourceDict
 diffSource (SourceDict a) (SourceDict b) = SourceDict $ difference a b
+
+lookupSource :: Text -> SourceDict -> Maybe Text
+lookupSource key sd = lookup key $ unSourceDict sd
