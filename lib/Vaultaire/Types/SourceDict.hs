@@ -71,11 +71,14 @@ instance Arbitrary SourceDict where
         attempt <- fromList . map (pack *** pack) <$> arbitrary
         either (const arbitrary) return $ makeSourceDict attempt
 
+-- | Wrapped HashMap.union for SourceDicts
 unionSource :: SourceDict -> SourceDict -> SourceDict
 unionSource (SourceDict a) (SourceDict b) = SourceDict $ union a b
 
+-- | Wrapped HashMap.difference for SourceDicts
 diffSource :: SourceDict -> SourceDict -> SourceDict
 diffSource (SourceDict a) (SourceDict b) = SourceDict $ difference a b
 
+-- | Wrapped HashMap.lookup for SourceDicts
 lookupSource :: Text -> SourceDict -> Maybe Text
 lookupSource key sd = lookup key $ unSourceDict sd
