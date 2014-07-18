@@ -50,6 +50,7 @@ library
                      blaze-builder,
                      attoparsec,
                      text,
+                     time,
                      locators >= 0.2.4
   ghc-options:       -O2
                      -threaded

@@ -20,6 +20,10 @@ module Vaultaire.Types
     calculateBucketNumber,
     isAddressExtended,
 
+    -- * Timestamp of measurements
+    TimeStamp(..),
+    convertToDiffTime,
+
     -- * Namespacing and authentication
     Origin(..),
     makeOrigin,
