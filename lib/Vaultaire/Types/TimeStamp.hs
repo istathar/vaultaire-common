@@ -29,7 +29,7 @@ newtype TimeStamp = TimeStamp {
 } deriving (Eq, Num, Bounded, Enum, Ord, Real, Integral)
 
 instance Show TimeStamp where
-    show = undefined -- FIXME
+    show = show . convertToDiffTime
 
 
 instance WireFormat TimeStamp where
@@ -40,5 +40,5 @@ instance Arbitrary TimeStamp where
     arbitrary = TimeStamp <$> arbitrary
 
 convertToDiffTime :: TimeStamp -> NominalDiffTime
-convertToDiffTime = fromRational . fromIntegral . (* 1000)
+convertToDiffTime = fromRational . (/ 1e9) . fromIntegral
 

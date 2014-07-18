@@ -35,6 +35,7 @@ library
                      Vaultaire.Types.WriteResult,
                      Vaultaire.Types.ContentsListBypass,
                      Vaultaire.Types.DayMap,
+                     Vaultaire.Types.TimeStamp,
                      Vaultaire.Types.PassThrough
 
   build-depends:     base >=3 && <5,
