@@ -12,13 +12,14 @@
 module Vaultaire.Types.TimeStamp
 (
     TimeStamp(..),
-    convertToDiffTime
+    convertToDiffTime,
+    getCurrentTimeNanoseconds
 ) where
 
 import Control.Applicative
 import Data.Packer (getWord64LE, putWord64LE, runPacking, tryUnpacking)
-import Data.String
 import Data.Time.Clock
+import Data.Time.Clock.POSIX
 import Data.Word (Word64)
 import Test.QuickCheck
 
@@ -41,4 +42,20 @@ instance Arbitrary TimeStamp where
 
 convertToDiffTime :: TimeStamp -> NominalDiffTime
 convertToDiffTime = fromRational . (/ 1e9) . fromIntegral
+
+--
+-- | Get the current system time, expressed as a TimeStamp (which is to say, number
+-- of nanoseconds since the Unix epoch).
+--
+{-
+    getPOSIXTime returns a NominalDiffTime with picosecond precision. So
+    convert it to nanoseconds, and discard any remaining fractional amount.
+-}
+getCurrentTimeNanoseconds :: IO TimeStamp -- Word64
+getCurrentTimeNanoseconds = do
+    t <- getPOSIXTime
+    let nanos = ((* 1e9) . fromRational . toRational) t :: Double
+    let i = (TimeStamp . floor) nanos
+    return i
+
 
