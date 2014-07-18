@@ -1,6 +1,6 @@
 cabal-version:       >= 1.10
 name:                vaultaire-common
-version:             2.0.3
+version:             2.0.4
 synopsis:            Common types and instances for Vaultaire
 license:             BSD3
 author:              Anchor Engineering <engineering@anchor.com.au>
@@ -35,6 +35,7 @@ library
                      Vaultaire.Types.WriteResult,
                      Vaultaire.Types.ContentsListBypass,
                      Vaultaire.Types.DayMap,
+                     Vaultaire.Types.TimeStamp,
                      Vaultaire.Types.PassThrough
 
   build-depends:     base >=3 && <5,
@@ -50,6 +51,7 @@ library
                      blaze-builder,
                      attoparsec,
                      text,
+                     time,
                      locators >= 0.2.4
   ghc-options:       -O2
                      -threaded

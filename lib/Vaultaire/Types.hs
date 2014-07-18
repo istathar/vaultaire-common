@@ -20,6 +20,11 @@ module Vaultaire.Types
     calculateBucketNumber,
     isAddressExtended,
 
+    -- * Timestamp of measurements
+    TimeStamp(..),
+    convertToDiffTime,
+    getCurrentTimeNanoseconds,
+
     -- * Namespacing and authentication
     Origin(..),
     makeOrigin,
@@ -71,5 +76,6 @@ import Vaultaire.Types.PassThrough
 import Vaultaire.Types.ReadRequest
 import Vaultaire.Types.ReadStream
 import Vaultaire.Types.SourceDict
+import Vaultaire.Types.TimeStamp
 import Vaultaire.Types.WriteResult
 
