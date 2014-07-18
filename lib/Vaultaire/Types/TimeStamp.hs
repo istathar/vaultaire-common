@@ -33,12 +33,12 @@ instance Show TimeStamp where
 
 
 instance WireFormat TimeStamp where
-    toWire = runPacking 8 . putWord64LE . unAddress
+    toWire = runPacking 8 . putWord64LE . unTimeStamp
     fromWire = tryUnpacking (TimeStamp `fmap` getWord64LE)
 
 instance Arbitrary TimeStamp where
     arbitrary = TimeStamp <$> arbitrary
 
-convertToDiffTime :: Address -> NominalDiffTime
+convertToDiffTime :: TimeStamp -> NominalDiffTime
 convertToDiffTime = fromRational . fromIntegral . (* 1000)
 
