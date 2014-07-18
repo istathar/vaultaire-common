@@ -25,6 +25,22 @@ import Test.QuickCheck
 
 import Vaultaire.Classes.WireFormat
 
+--
+-- | Number of nanoseconds since the Unix epoch, stored in a Word64.
+--
+-- The Show instance displays the TimeStamp as seconds with the nanosecond precision expressed as
+-- a decimal amount after the interger, ie:
+--
+-- >>> t <- getCurrentTimeNanoseconds
+-- >>> show t
+-- 1405656663.561632s
+--
+-- However this doesn't change the fact the underlying representation counts
+-- nanoseconds since epoch:
+--
+-- >>> show $ unTimeStamp t
+-- 1405656663561632000
+--
 newtype TimeStamp = TimeStamp {
     unTimeStamp :: Word64
 } deriving (Eq, Num, Bounded, Enum, Ord, Real, Integral)
@@ -40,12 +56,17 @@ instance WireFormat TimeStamp where
 instance Arbitrary TimeStamp where
     arbitrary = TimeStamp <$> arbitrary
 
+--
+-- | Utility function to convert nanoseconds since Unix epoch to a
+-- 'NominalDiffTime', allowing you to then use the time manipulation
+-- functions in "Data.Time.Clock"
+--
 convertToDiffTime :: TimeStamp -> NominalDiffTime
 convertToDiffTime = fromRational . (/ 1e9) . fromIntegral
 
 --
--- | Get the current system time, expressed as a TimeStamp (which is to say, number
--- of nanoseconds since the Unix epoch).
+-- | Get the current system time, expressed as a 'TimeStamp' (which is to
+-- say, number of nanoseconds since the Unix epoch).
 --
 {-
     getPOSIXTime returns a NominalDiffTime with picosecond precision. So
