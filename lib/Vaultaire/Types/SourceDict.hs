@@ -29,12 +29,12 @@ import Control.Exception (SomeException (..))
 import Data.Attoparsec.Text (parseOnly)
 import qualified Data.Attoparsec.Text as PT
 import Data.HashMap.Strict (HashMap, difference, foldlWithKey', fromList,
-                            union, lookup)
-import Prelude hiding (lookup)
+                            lookup, union)
 import Data.Maybe (isNothing)
 import Data.Monoid (Monoid, mempty, (<>))
 import Data.Text (Text, find, pack)
 import Data.Text.Encoding (decodeUtf8', encodeUtf8)
+import Prelude hiding (lookup)
 import Test.QuickCheck
 import Vaultaire.Classes.WireFormat
 
