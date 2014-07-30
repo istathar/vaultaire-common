@@ -67,7 +67,7 @@ type NumBuckets = Word64
 -- since 00:00:00:00:00 UTC on January 1 1970 (i.e., UNIX time
 -- multiplied by 10^9).
 newtype Time = Time { unTime :: Word64 }
-  deriving (Eq, Arbitrary)
+  deriving (Eq, Ord, Enum, Arbitrary, Num, Real, Integral, Bounded)
 
 instance Show Time where
   show = show . unTime
