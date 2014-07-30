@@ -21,7 +21,7 @@ suite :: Spec
 suite = do
   describe "Test serialisation/deserialiastion" $ do
     it "serialises Zulu time" $ do
-      read "1970-01-01" `shouldBe` (0 :: Time)
+      read "1970-01-01" `shouldBe` (Time 0 :: Time)
 
     it "deserialises into Unix time by default" $ do
-      show $ read "1970-01-01" `shouldBe` "0"
+      show (read "1970-01-01" :: Time) `shouldBe` "0"
