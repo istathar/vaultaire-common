@@ -8,6 +8,7 @@
 --
 
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE TupleSections #-}
 
 module Vaultaire.Types.Address
 (
@@ -29,6 +30,9 @@ import Vaultaire.Classes.WireFormat
 newtype Address = Address {
     unAddress :: Word64
 } deriving (Eq, Num, Bounded)
+
+instance Read Address where
+    readsPrec _ = pure . (,"") . Address . fromInteger . fromBase62
 
 instance Show Address where
     show = padWithZeros 11 . toBase62 . toInteger . unAddress

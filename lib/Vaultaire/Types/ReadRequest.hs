@@ -42,8 +42,8 @@ instance WireFormat ReadRequest where
             header <- getWord8
             addr_bytes <- getBytes 8
             addr <- either (fail . show) return $ fromWire addr_bytes
-            start <- getWord64LE
-            end <- getWord64LE
+            start <- Time <$> getWord64LE
+            end <- Time <$> getWord64LE
             case header of
                 0 -> return $ SimpleReadRequest addr start end
                 1 -> return $ ExtendedReadRequest addr start end
@@ -55,11 +55,10 @@ packWithHeaderByte header addr start end =
     in runPacking 25 $ do
         putWord8 header
         putBytes addr_bytes
-        putWord64LE start
-        putWord64LE end
+        putWord64LE $ unTime start
+        putWord64LE $ unTime end
 
 instance Arbitrary ReadRequest where
     arbitrary =
         oneof [ SimpleReadRequest <$> arbitrary <*> arbitrary <*> arbitrary
               , ExtendedReadRequest <$> arbitrary <*> arbitrary <*> arbitrary ]
-

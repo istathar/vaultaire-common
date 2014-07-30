@@ -54,6 +54,7 @@ library
                      attoparsec,
                      text,
                      time,
+                     old-locale,
                      locators >= 0.2.4
   ghc-options:       -O2
                      -threaded
