@@ -62,7 +62,7 @@ module Vaultaire.Types
     -- * Convenience/clarity
     Epoch,
     NumBuckets,
-    Time,
+    Time(..),
 ) where
 
 import Vaultaire.Classes.WireFormat
@@ -78,4 +78,3 @@ import Vaultaire.Types.ReadStream
 import Vaultaire.Types.SourceDict
 import Vaultaire.Types.TimeStamp
 import Vaultaire.Types.WriteResult
-
