@@ -82,11 +82,4 @@ instance Read Time where
       parse x =   parseTime defaultTimeLocale "%FT%XZ" x
               <|> parseTime defaultTimeLocale "%F" x
               <|> parseTime defaultTimeLocale "%s" x
-              <|> parseTime defaultTimeLocale "%s" (truncateNano x)
-
-      truncateNano :: String -> String
-      truncateNano x
-        | len >= 10 = take (len - 9) x
-        | len < 10  = x
-        where
-          len = length x
+              <|> parseTime defaultTimeLocale "%s" (take (length x - 9) x)
