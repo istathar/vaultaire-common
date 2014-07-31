@@ -42,11 +42,11 @@ instance WireFormat ReadRequest where
             header <- getWord8
             addr_bytes <- getBytes 8
             addr <- either (fail . show) return $ fromWire addr_bytes
-            start <- Time <$> getWord64LE
-            end <- Time <$> getWord64LE
+            start <- TimeStamp <$> getWord64LE
+            end <- TimeStamp <$> getWord64LE
             case header of
-                0 -> return $ SimpleReadRequest addr (TimeStamp start) (TimeStamp end)
-                1 -> return $ ExtendedReadRequest addr (TimeStamp start) (TimeStamp end)
+                0 -> return $ SimpleReadRequest addr start end
+                1 -> return $ ExtendedReadRequest addr start end
                 _ -> fail "invalid header byte"
 
 packWithHeaderByte :: Word8 -> Address -> TimeStamp -> TimeStamp -> ByteString

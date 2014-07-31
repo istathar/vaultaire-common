@@ -8,6 +8,7 @@
 --
 
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE TupleSections #-}
 
 module Vaultaire.Types.TimeStamp
 (
@@ -18,8 +19,12 @@ module Vaultaire.Types.TimeStamp
 
 import Control.Applicative
 import Data.Packer (getWord64LE, putWord64LE, runPacking, tryUnpacking)
+import Data.Time.Calendar
 import Data.Time.Clock
 import Data.Time.Clock.POSIX
+import Data.Time.Format
+import Data.Maybe
+import System.Locale
 import Data.Word (Word64)
 import Test.QuickCheck
 
@@ -28,48 +33,54 @@ import Vaultaire.Classes.WireFormat
 --
 -- | Number of nanoseconds since the Unix epoch, stored in a Word64.
 --
--- The Show instance displays the TimeStamp as seconds with the nanosecond precision expressed as
--- a decimal amount after the interger, ie:
+-- The Show instance displays the TimeStamp as seconds with the nanosecond
+-- precision expressed as a decimal amount after the interger, ie:
 --
 -- >>> t <- getCurrentTimeNanoseconds
 -- >>> show t
--- 1405656663.561632s
+-- 2014-07-31T23:09:35.274387000Z
 --
 -- However this doesn't change the fact the underlying representation counts
 -- nanoseconds since epoch:
 --
 -- >>> show $ unTimeStamp t
--- 1405656663561632000
+-- 1406848175274387000
+--
+-- There is a Read instance that is reasonably accommodating.
+-- 
+-- >>> read "2014-07-31T13:05:04.942089001Z" ::TimeStamp
+-- 2014-07-31T13:05:04.942089001Z
+-- 
+-- >>> read "1406811904.942089001" :: TimeStamp
+-- 2014-07-31T13:05:04.942089001Z
+--
+-- >>> read "1406811904" :: TimeStamp
+-- 2014-07-31T13:05:04.000000000Z 
 --
 newtype TimeStamp = TimeStamp {
     unTimeStamp :: Word64
-} deriving (Eq, Num, Bounded, Enum, Ord, Real, Integral)
-
-{-
-instance Show TimeStamp where
-    show = show . convertToDiffTime
--}
+} deriving (Eq, Ord, Enum, Arbitrary, Num, Real, Integral, Bounded)
 
 instance Show TimeStamp where
-  show = show . unTimeStamp
+    show (TimeStamp t) =
+      let
+        seconds = posixSecondsToUTCTime $ realToFrac $ (fromIntegral t / 1000000000 :: Rational)
+        iso8601 = formatTime defaultTimeLocale "%FT%T.%q" seconds
+      in
+        -- trim to nanoseconds
+        (take 29 iso8601) ++ "Z"
 
 instance Read TimeStamp where
-  readsPrec _ s = maybeToList $ (,"") <$> Time <$> toNano <$> parse s
-    where
-      toNano :: UTCTime -> Word64
-      toNano =  (*10^(9 :: Word64)) . read . formatTime defaultTimeLocale "%s"
-
-      parse :: String -> Maybe UTCTime
-      parse x =   parseTime defaultTimeLocale "%FT%XZ" x
-              <|> parseTime defaultTimeLocale "%F" x
-
+    readsPrec _ s = maybeToList $ (,"") <$> convertToTimeStamp <$> parse s
+      where
+        parse :: String -> Maybe UTCTime
+        parse x =   parseTime defaultTimeLocale "%FT%T%QZ" x
+                <|> parseTime defaultTimeLocale "%F" x
+                <|> parseTime defaultTimeLocale "%s%Q" x
 
 instance WireFormat TimeStamp where
     toWire = runPacking 8 . putWord64LE . unTimeStamp
     fromWire = tryUnpacking (TimeStamp `fmap` getWord64LE)
-
-instance Arbitrary TimeStamp where
-    arbitrary = TimeStamp <$> arbitrary
 
 --
 -- | Utility function to convert nanoseconds since Unix epoch to a
@@ -89,9 +100,26 @@ convertToDiffTime = fromRational . (/ 1e9) . fromIntegral
 -}
 getCurrentTimeNanoseconds :: IO TimeStamp -- Word64
 getCurrentTimeNanoseconds = do
-    t <- getPOSIXTime
-    let nanos = ((* 1e9) . fromRational . toRational) t :: Double
-    let i = (TimeStamp . floor) nanos
-    return i
+    u <- getCurrentTime
+    return $ convertToTimeStamp u
 
+{-
+    This code adapted from the implementation in Data.Time.Clock.POSIX. The
+    time types in base are hopeless. Julian days? Really? We'll replace this
+    with hs-hourglass shortly.
+-}
 
+secondsPerDay :: Integer
+secondsPerDay = 86400
+
+unixEpochDay :: Day
+unixEpochDay = ModifiedJulianDay 40587
+
+convertToTimeStamp :: UTCTime -> TimeStamp
+convertToTimeStamp (UTCTime day secs) =
+  let
+    mark = (diffDays day unixEpochDay) * secondsPerDay * 1000000000
+
+    nano = floor $ (*1000000000) $ toRational secs
+  in
+    TimeStamp $ fromIntegral $ mark + nano

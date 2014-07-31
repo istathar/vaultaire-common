@@ -87,9 +87,9 @@ test-suite           wire-formats-test
                      -Wwarn
                      -fwarn-tabs
 
-test-suite           types
+test-suite           instance-test
   hs-source-dirs:    tests
-  main-is:           Types.hs
+  main-is:           InstanceTest.hs
   type:              exitcode-stdio-1.0
   default-language:  Haskell2010
 
