@@ -81,3 +81,5 @@ instance Read Time where
       parse :: String -> Maybe UTCTime
       parse x =   parseTime defaultTimeLocale "%FT%XZ" x
               <|> parseTime defaultTimeLocale "%F" x
+              <|> parseTime defaultTimeLocale "%s" x
+              <|> parseTime defaultTimeLocale "%s" (take (length x - 9) x)
