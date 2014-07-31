@@ -62,7 +62,6 @@ module Vaultaire.Types
     -- * Convenience/clarity
     Epoch,
     NumBuckets,
-    Time,
 ) where
 
 import Vaultaire.Classes.WireFormat

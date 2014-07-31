@@ -16,7 +16,6 @@ module Vaultaire.Types.Common
     makeOrigin,
     Epoch,
     NumBuckets,
-    Time,
 ) where
 
 import Control.Applicative
@@ -57,7 +56,3 @@ makeOrigin bs
 type Epoch = Word64
 type NumBuckets = Word64
 
--- |Time is a Word64 representing the number of nanoseconds elapsed
--- since 00:00:00:00:00 UTC on January 1 1970 (i.e., UNIX time
--- multiplied by 10^9).
-type Time = Word64
