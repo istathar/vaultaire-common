@@ -9,13 +9,14 @@
 
 {-# LANGUAGE DeriveDataTypeable         #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE TupleSections #-}
 
 module Vaultaire.Types.Common
 (
     Origin(..),
     makeOrigin,
     Epoch,
-    NumBuckets,
+    NumBuckets
 ) where
 
 import Control.Applicative
@@ -28,7 +29,12 @@ import Data.Locator
 import Data.String (IsString)
 import Data.Typeable (Typeable)
 import Data.Word (Word64)
+import Data.Maybe
 import Test.QuickCheck
+
+import Data.Time.Clock (UTCTime)
+import Data.Time.Format (formatTime, parseTime)
+import System.Locale (defaultTimeLocale)
 
 -- |Origin is a six-character ByteString representing a data origin.
 newtype Origin = Origin { unOrigin :: ByteString }
@@ -55,4 +61,3 @@ makeOrigin bs
 
 type Epoch = Word64
 type NumBuckets = Word64
-

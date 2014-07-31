@@ -42,8 +42,8 @@ instance WireFormat ReadRequest where
             header <- getWord8
             addr_bytes <- getBytes 8
             addr <- either (fail . show) return $ fromWire addr_bytes
-            start <- getWord64LE
-            end <- getWord64LE
+            start <- Time <$> getWord64LE
+            end <- Time <$> getWord64LE
             case header of
                 0 -> return $ SimpleReadRequest addr (TimeStamp start) (TimeStamp end)
                 1 -> return $ ExtendedReadRequest addr (TimeStamp start) (TimeStamp end)
@@ -62,4 +62,3 @@ instance Arbitrary ReadRequest where
     arbitrary =
         oneof [ SimpleReadRequest <$> arbitrary <*> arbitrary <*> arbitrary
               , ExtendedReadRequest <$> arbitrary <*> arbitrary <*> arbitrary ]
-

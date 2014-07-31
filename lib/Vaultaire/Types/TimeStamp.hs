@@ -45,8 +45,23 @@ newtype TimeStamp = TimeStamp {
     unTimeStamp :: Word64
 } deriving (Eq, Num, Bounded, Enum, Ord, Real, Integral)
 
+{-
 instance Show TimeStamp where
     show = show . convertToDiffTime
+-}
+
+instance Show TimeStamp where
+  show = show . unTimeStamp
+
+instance Read TimeStamp where
+  readsPrec _ s = maybeToList $ (,"") <$> Time <$> toNano <$> parse s
+    where
+      toNano :: UTCTime -> Word64
+      toNano =  (*10^(9 :: Word64)) . read . formatTime defaultTimeLocale "%s"
+
+      parse :: String -> Maybe UTCTime
+      parse x =   parseTime defaultTimeLocale "%FT%XZ" x
+              <|> parseTime defaultTimeLocale "%F" x
 
 
 instance WireFormat TimeStamp where

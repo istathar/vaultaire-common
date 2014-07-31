@@ -54,6 +54,7 @@ library
                      attoparsec,
                      text,
                      time,
+                     old-locale,
                      locators >= 0.2.4
   ghc-options:       -O2
                      -threaded
@@ -69,7 +70,7 @@ test-suite           wire-formats-test
   type:              exitcode-stdio-1.0
   default-language:  Haskell2010
 
-  build-depends:     base >=3 && <5,
+  build-depends:     base >=4.7 && <5,
                      hspec,
                      containers,
                      unordered-containers,
@@ -78,6 +79,22 @@ test-suite           wire-formats-test
                      QuickCheck,
                      mtl,
                      bytestring,
+                     vaultaire-common
+
+  ghc-options:       -O2
+                     -threaded
+                     -Wall
+                     -Wwarn
+                     -fwarn-tabs
+
+test-suite           types
+  hs-source-dirs:    tests
+  main-is:           Types.hs
+  type:              exitcode-stdio-1.0
+  default-language:  Haskell2010
+
+  build-depends:     base >=4.7 && <5,
+                     hspec,
                      vaultaire-common
 
   ghc-options:       -O2

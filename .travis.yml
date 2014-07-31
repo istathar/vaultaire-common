@@ -1,8 +1,6 @@
 language: haskell
 env:
-  - 'UBUNTU_RELEASE=saucy GHCVER=7.6.1'
-  - 'UBUNTU_RELEASE=saucy GHCVER=7.6.2'
-  - 'UBUNTU_RELEASE=saucy GHCVER=7.6.3'
+  - 'UBUNTU_RELEASE=saucy GHCVER=7.8.3'
 
 before_install:
   - 'sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ ${UBUNTU_RELEASE} main universe"'

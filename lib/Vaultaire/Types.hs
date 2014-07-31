@@ -20,7 +20,7 @@ module Vaultaire.Types
     calculateBucketNumber,
     isAddressExtended,
 
-    -- * Timestamp of measurements
+    -- * Time of a measurement
     TimeStamp(..),
     convertToDiffTime,
     getCurrentTimeNanoseconds,
@@ -61,7 +61,7 @@ module Vaultaire.Types
 
     -- * Convenience/clarity
     Epoch,
-    NumBuckets,
+    NumBuckets
 ) where
 
 import Vaultaire.Classes.WireFormat
@@ -77,4 +77,3 @@ import Vaultaire.Types.ReadStream
 import Vaultaire.Types.SourceDict
 import Vaultaire.Types.TimeStamp
 import Vaultaire.Types.WriteResult
-
