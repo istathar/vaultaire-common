@@ -90,12 +90,3 @@ instance Read Time where
         | len < 10  = x
         where
           len = length x
-        
-
-        
-            
-
-        
-        
-
-
