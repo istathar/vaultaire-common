@@ -9,15 +9,13 @@
 
 {-# LANGUAGE DeriveDataTypeable         #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE TupleSections #-}
 
 module Vaultaire.Types.Common
 (
     Origin(..),
     makeOrigin,
     Epoch,
-    NumBuckets,
-    Time(..),
+    NumBuckets
 ) where
 
 import Control.Applicative
@@ -30,12 +28,7 @@ import Data.Locator
 import Data.String (IsString)
 import Data.Typeable (Typeable)
 import Data.Word (Word64)
-import Data.Maybe
 import Test.QuickCheck
-
-import Data.Time.Clock (UTCTime)
-import Data.Time.Format (formatTime, parseTime)
-import System.Locale (defaultTimeLocale)
 
 -- |Origin is a six-character ByteString representing a data origin.
 newtype Origin = Origin { unOrigin :: ByteString }
@@ -62,24 +55,3 @@ makeOrigin bs
 
 type Epoch = Word64
 type NumBuckets = Word64
-
--- |Time is a Word64 representing the number of nanoseconds elapsed
--- since 00:00:00:00:00 UTC on January 1 1970 (i.e., UNIX time
--- multiplied by 10^9).
-newtype Time = Time { unTime :: Word64 }
-  deriving (Eq, Ord, Enum, Arbitrary, Num, Real, Integral, Bounded)
-
-instance Show Time where
-  show = show . unTime
-
-instance Read Time where
-  readsPrec _ s = maybeToList $ (,"") <$> Time <$> toNano <$> parse s
-    where
-      toNano :: UTCTime -> Word64
-      toNano =  (*10^(9 :: Word64)) . read . formatTime defaultTimeLocale "%s"
-
-      parse :: String -> Maybe UTCTime
-      parse x =   parseTime defaultTimeLocale "%FT%XZ" x
-              <|> parseTime defaultTimeLocale "%F" x
-              <|> parseTime defaultTimeLocale "%s" x
-              <|> parseTime defaultTimeLocale "%s" (take (length x - 9) x)

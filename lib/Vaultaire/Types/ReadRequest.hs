@@ -24,10 +24,10 @@ import Data.Word (Word8)
 import Test.QuickCheck
 import Vaultaire.Classes.WireFormat
 import Vaultaire.Types.Address
-import Vaultaire.Types.Common
+import Vaultaire.Types.TimeStamp
 
-data ReadRequest = SimpleReadRequest Address Time Time
-                 | ExtendedReadRequest Address Time Time
+data ReadRequest = SimpleReadRequest Address TimeStamp TimeStamp
+                 | ExtendedReadRequest Address TimeStamp TimeStamp
   deriving (Eq, Show)
 
 instance WireFormat ReadRequest where
@@ -42,21 +42,21 @@ instance WireFormat ReadRequest where
             header <- getWord8
             addr_bytes <- getBytes 8
             addr <- either (fail . show) return $ fromWire addr_bytes
-            start <- Time <$> getWord64LE
-            end <- Time <$> getWord64LE
+            start <- TimeStamp <$> getWord64LE
+            end <- TimeStamp <$> getWord64LE
             case header of
                 0 -> return $ SimpleReadRequest addr start end
                 1 -> return $ ExtendedReadRequest addr start end
                 _ -> fail "invalid header byte"
 
-packWithHeaderByte :: Word8 -> Address -> Time -> Time -> ByteString
+packWithHeaderByte :: Word8 -> Address -> TimeStamp -> TimeStamp -> ByteString
 packWithHeaderByte header addr start end =
     let addr_bytes = toWire addr
     in runPacking 25 $ do
         putWord8 header
         putBytes addr_bytes
-        putWord64LE $ unTime start
-        putWord64LE $ unTime end
+        putWord64LE (unTimeStamp start)
+        putWord64LE (unTimeStamp end)
 
 instance Arbitrary ReadRequest where
     arbitrary =

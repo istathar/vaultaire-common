@@ -1,6 +1,6 @@
 cabal-version:       >= 1.10
 name:                vaultaire-common
-version:             2.1.2
+version:             2.4.1
 synopsis:            Common types and instances for Vaultaire
 license:             BSD3
 author:              Anchor Engineering <engineering@anchor.com.au>
@@ -87,9 +87,9 @@ test-suite           wire-formats-test
                      -Wwarn
                      -fwarn-tabs
 
-test-suite           types
+test-suite           instance-test
   hs-source-dirs:    tests
-  main-is:           Types.hs
+  main-is:           InstanceTest.hs
   type:              exitcode-stdio-1.0
   default-language:  Haskell2010
 
