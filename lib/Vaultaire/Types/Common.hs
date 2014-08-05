@@ -9,6 +9,7 @@
 
 {-# LANGUAGE DeriveDataTypeable         #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE TupleSections #-}
 
 module Vaultaire.Types.Common
 (
@@ -29,6 +30,7 @@ import Data.String (IsString)
 import Data.Typeable (Typeable)
 import Data.Word (Word64)
 import Test.QuickCheck
+import Data.Either
 
 -- |Origin is a six-character ByteString representing a data origin.
 newtype Origin = Origin { unOrigin :: ByteString }
@@ -37,6 +39,9 @@ newtype Origin = Origin { unOrigin :: ByteString }
 instance Arbitrary Origin where
     -- suchThat condition should be removed once locators package is fixed
     arbitrary = Origin . S.pack . toLocator16a 6 <$> arbitrary `suchThat` (>0)
+
+instance Read Origin where
+  readsPrec _ = fmap (,"") . rights . (:[]) . makeOrigin . S.pack
 
 -- | Invalid origin Exception
 data BadOrigin = BadOrigin
