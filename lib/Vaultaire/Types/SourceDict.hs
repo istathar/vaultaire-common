@@ -18,6 +18,7 @@ module Vaultaire.Types.SourceDict
     unionSource,
     diffSource,
     lookupSource,
+    hashSource,
     makeSourceDict
 ) where
 
@@ -26,14 +27,19 @@ import Blaze.ByteString.Builder.Char8 (fromChar)
 import Control.Applicative (many, optional, (<$>), (<*), (<*>))
 import Control.Arrow ((***))
 import Control.Exception (SomeException (..))
+import Crypto.MAC.SipHash
 import Data.Attoparsec.Text (parseOnly)
 import qualified Data.Attoparsec.Text as PT
 import Data.HashMap.Strict (HashMap, difference, foldlWithKey', fromList,
-                            lookup, union)
+                            toList, lookup, union)
+import Data.List (sortBy)
 import Data.Maybe (isNothing)
+import Data.Ord (comparing)
 import Data.Monoid (Monoid, mempty, (<>))
-import Data.Text (Text, find, pack)
+import Data.Serialize
+import Data.Text (Text, find, pack, unpack)
 import Data.Text.Encoding (decodeUtf8', encodeUtf8)
+import Data.Word
 import Prelude hiding (lookup)
 import Test.QuickCheck
 import Vaultaire.Classes.WireFormat
@@ -82,3 +88,11 @@ diffSource (SourceDict a) (SourceDict b) = SourceDict $ difference a b
 -- | Wrapped HashMap.lookup for SourceDicts
 lookupSource :: Text -> SourceDict -> Maybe Text
 lookupSource key sd = lookup key $ unSourceDict sd
+
+-- | Hashes the sourcedict using SipHash
+-- Hashes are used primarily to avoid redundant updates
+hashSource :: SourceDict -> Word64
+hashSource (SourceDict sd) =
+    let canonicalList = sortBy (comparing fst) (map (unpack *** unpack) $ toList sd) in
+    let (SipHash ret) = hash (SipKey 0 0) (encode canonicalList) in
+    ret

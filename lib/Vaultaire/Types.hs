@@ -34,6 +34,7 @@ module Vaultaire.Types
     unionSource,
     diffSource,
     lookupSource,
+    hashSource,
     makeSourceDict,
 
     -- * Operations with the contents store
