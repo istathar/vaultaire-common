@@ -15,8 +15,7 @@ module Vaultaire.Types.TimeStamp
     TimeStamp(..),
     convertToDiffTime,
     getCurrentTimeNanoseconds,
-    getCurrentTimeWithOffset,
-    getCurrentTimeWithOffsetDays
+    addTimeStamp
 ) where
 
 import Control.Applicative
@@ -105,18 +104,8 @@ getCurrentTimeNanoseconds = do
     u <- getCurrentTime
     return $ convertToTimeStamp u
 
-getCurrentTimeWithOffset :: POSIXTime    -- ^ offset
-                         -> IO TimeStamp -- ^ time in ns
-getCurrentTimeWithOffset x = do
-    u <- getCurrentTime
-    return $ convertToTimeStamp $ addUTCTime x u
-
-getCurrentTimeWithOffsetDays :: Int          -- ^ number of days to offset
-                             -> IO TimeStamp -- ^ time ns
-getCurrentTimeWithOffsetDays x = do
-    u <- getCurrentTime
-    let y = foldl (+) 0 $ take x $ repeat posixDayLength
-    return $ convertToTimeStamp $ addUTCTime y u
+addTimeStamp :: POSIXTime -> TimeStamp -> TimeStamp
+addTimeStamp x a = convertToTimeStamp $ addUTCTime (convertToDiffTime a) (posixSecondsToUTCTime x)
 
 {-
     This code adapted from the implementation in Data.Time.Clock.POSIX. The
