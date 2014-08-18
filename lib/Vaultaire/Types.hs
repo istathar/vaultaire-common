@@ -36,6 +36,13 @@ module Vaultaire.Types
     lookupSource,
     makeSourceDict,
 
+    -- * Caching SourceDicts
+    hashSource,
+    SourceDictCache,
+    emptySourceCache,
+    insertSourceCache,
+    memberSourceCache,
+
     -- * Operations with the contents store
     ContentsOperation(..),
     ContentsResponse(..),
@@ -75,5 +82,6 @@ import Vaultaire.Types.PassThrough
 import Vaultaire.Types.ReadRequest
 import Vaultaire.Types.ReadStream
 import Vaultaire.Types.SourceDict
+import Vaultaire.Types.SourceDictCache
 import Vaultaire.Types.TimeStamp
 import Vaultaire.Types.WriteResult
