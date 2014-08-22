@@ -1,6 +1,6 @@
 cabal-version:       >= 1.10
 name:                vaultaire-common
-version:             2.5.0
+version:             2.5.1
 synopsis:            Common types and instances for Vaultaire
 license:             BSD3
 author:              Anchor Engineering <engineering@anchor.com.au>
