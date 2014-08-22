@@ -29,7 +29,7 @@ import Vaultaire.Classes.WireFormat
 
 newtype Address = Address {
     unAddress :: Word64
-} deriving (Eq, Num, Bounded)
+} deriving (Eq, Ord, Num, Bounded)
 
 instance Read Address where
     readsPrec _ = pure . (,"") . Address . fromInteger . fromBase62
