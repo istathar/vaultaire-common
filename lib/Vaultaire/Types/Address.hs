@@ -19,6 +19,7 @@ module Vaultaire.Types.Address
 
 import Control.Applicative
 import Data.Bits
+import Data.Hashable
 import Data.Locator
 import Data.Packer (getWord64LE, putWord64LE, runPacking, tryUnpacking)
 import Data.String
