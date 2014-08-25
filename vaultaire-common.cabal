@@ -1,6 +1,6 @@
 cabal-version:       >= 1.10
 name:                vaultaire-common
-version:             2.4.1
+version:             2.5.1
 synopsis:            Common types and instances for Vaultaire
 license:             BSD3
 author:              Anchor Engineering <engineering@anchor.com.au>
@@ -30,6 +30,7 @@ library
                      Vaultaire.Types.ContentsOperation,
                      Vaultaire.Types.ContentsResponse,
                      Vaultaire.Types.SourceDict,
+                     Vaultaire.Types.SourceDictCache,
                      Vaultaire.Types.ReadStream,
                      Vaultaire.Types.ReadRequest,
                      Vaultaire.Types.Common,
@@ -55,7 +56,9 @@ library
                      text,
                      time,
                      old-locale,
-                     locators >= 0.2.4
+                     locators >= 0.2.4,
+                     siphash,
+                     cereal
   ghc-options:       -O2
                      -threaded
                      -Wall

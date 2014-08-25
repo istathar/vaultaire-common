@@ -19,6 +19,7 @@ module Vaultaire.Types.Address
 
 import Control.Applicative
 import Data.Bits
+import Data.Hashable
 import Data.Locator
 import Data.Packer (getWord64LE, putWord64LE, runPacking, tryUnpacking)
 import Data.String
@@ -29,7 +30,7 @@ import Vaultaire.Classes.WireFormat
 
 newtype Address = Address {
     unAddress :: Word64
-} deriving (Eq, Num, Bounded)
+} deriving (Eq, Ord, Hashable, Num, Bounded)
 
 instance Read Address where
     readsPrec _ = pure . (,"") . Address . fromInteger . fromBase62
