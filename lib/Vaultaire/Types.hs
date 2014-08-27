@@ -24,6 +24,7 @@ module Vaultaire.Types
     TimeStamp(..),
     convertToDiffTime,
     getCurrentTimeNanoseconds,
+    addTimeStamp,
 
     -- * Namespacing and authentication
     Origin(..),

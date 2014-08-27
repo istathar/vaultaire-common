@@ -14,7 +14,8 @@ module Vaultaire.Types.TimeStamp
 (
     TimeStamp(..),
     convertToDiffTime,
-    getCurrentTimeNanoseconds
+    getCurrentTimeNanoseconds,
+    addTimeStamp
 ) where
 
 import Control.Applicative
@@ -103,6 +104,9 @@ getCurrentTimeNanoseconds :: IO TimeStamp -- Word64
 getCurrentTimeNanoseconds = do
     u <- getCurrentTime
     return $ convertToTimeStamp u
+
+addTimeStamp :: POSIXTime -> TimeStamp -> TimeStamp
+addTimeStamp x a = convertToTimeStamp $ addUTCTime (convertToDiffTime a) (posixSecondsToUTCTime x)
 
 {-
     This code adapted from the implementation in Data.Time.Clock.POSIX. The
