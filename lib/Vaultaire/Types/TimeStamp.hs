@@ -77,7 +77,6 @@ instance Read TimeStamp where
         parse x =   parseTime defaultTimeLocale "%FT%T%QZ" x
                 <|> parseTime defaultTimeLocale "%F" x
                 <|> parseTime defaultTimeLocale "%s%Q" x
-                <|> parseTime defaultTimeLocale "%FT%T%Q%z" x
 
 instance WireFormat TimeStamp where
     toWire = runPacking 8 . putWord64LE . unTimeStamp
