@@ -35,20 +35,14 @@ import System.Posix.Signals
 -- Main program entry point
 --
 
-interruptHandler :: MVar () -> Handler
-interruptHandler semaphore = Catch $ do
-    hPutStrLn stdout "\nInterrupt"
+quitHandler :: MVar () -> String -> Handler
+quitHandler semaphore message = Catch $ do
+    hPutStrLn stdout ("\n" ++message)
     hFlush stdout
     putMVar semaphore ()
 
-terminateHandler :: MVar () -> Handler
-terminateHandler semaphore = Catch $ do
-    hPutStrLn stdout "Terminating"
-    hFlush stdout
-    putMVar semaphore ()
-
-quitHandler :: Handler
-quitHandler = Catch $ do
+useroneHandler :: Handler
+useroneHandler = Catch $ do
     hPutStrLn stdout ""
     hFlush stdout
     logger <- getLogger rootLoggerName
@@ -59,7 +53,7 @@ quitHandler = Catch $ do
                     _           -> DEBUG
         logger' = setLevel level' logger
     saveGlobalLogger logger'
-    infoM "Main.quitHandler" ("Change log level to " ++ show level')
+    infoM "Main.useroneHandler" ("Change log level to " ++ show level')
 
 data Verbosity = Debug | Normal | Quiet deriving Show
 
@@ -100,9 +94,10 @@ initializeProgram banner verbosity = do
 
     quit <- newEmptyMVar
 
-    _ <- installHandler sigINT  (interruptHandler quit) Nothing
-    _ <- installHandler sigTERM (terminateHandler quit) Nothing
-    _ <- installHandler sigQUIT (quitHandler) Nothing
+    _ <- installHandler sigUSR1 (useroneHandler) Nothing
+    _ <- installHandler sigINT  (quitHandler quit "Interrupt") Nothing
+    _ <- installHandler sigTERM (quitHandler quit "Terminating") Nothing
+    _ <- installHandler sigQUIT (quitHandler quit "Quit") Nothing
 
 
     debugM "Program.initialize" "Signal handlers installed"
