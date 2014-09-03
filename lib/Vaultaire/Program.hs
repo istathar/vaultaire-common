@@ -35,21 +35,9 @@ import System.Posix.Signals
 -- Main program entry point
 --
 
-quitHandler :: MVar () -> Handler
-quitHandler semaphore = Catch $ do
-    hPutStrLn stdout "\nProper Quit"
-    hFlush stdout
-    putMVar semaphore ()
-
-interruptHandler :: MVar () -> Handler
-interruptHandler semaphore = Catch $ do
-    hPutStrLn stdout "\nInterrupt"
-    hFlush stdout
-    putMVar semaphore ()
-
-terminateHandler :: MVar () -> Handler
-terminateHandler semaphore = Catch $ do
-    hPutStrLn stdout "\nTerminating"
+quitHandler :: MVar () -> String -> Handler
+quitHandler semaphore message = Catch $ do
+    hPutStrLn stdout ("\n" ++message)
     hFlush stdout
     putMVar semaphore ()
 
@@ -107,9 +95,9 @@ initializeProgram banner verbosity = do
     quit <- newEmptyMVar
 
     _ <- installHandler sigUSR1 (useroneHandler) Nothing
-    _ <- installHandler sigINT  (interruptHandler quit) Nothing
-    _ <- installHandler sigTERM (terminateHandler quit) Nothing
-    _ <- installHandler sigQUIT (quitHandler quit) Nothing
+    _ <- installHandler sigINT  (quitHandler quit "Interrupt") Nothing
+    _ <- installHandler sigTERM (quitHandler quit "Terminating") Nothing
+    _ <- installHandler sigQUIT (quitHandler quit "Quit") Nothing
 
 
     debugM "Program.initialize" "Signal handlers installed"
