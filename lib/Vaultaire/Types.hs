@@ -42,6 +42,7 @@ module Vaultaire.Types
     emptySourceCache,
     insertSourceCache,
     memberSourceCache,
+    sizeOfSourceCache,
 
     -- * Operations with the contents store
     ContentsOperation(..),

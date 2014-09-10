@@ -3,7 +3,8 @@ module Vaultaire.Types.SourceDictCache
     SourceDictCache,
     emptySourceCache,
     insertSourceCache,
-    memberSourceCache
+    memberSourceCache,
+    sizeOfSourceCache
 ) where
 
 import Control.Applicative
@@ -32,3 +33,6 @@ insertSourceCache x (SourceDictCache sdc) = SourceDictCache (Set.insert x sdc)
 
 memberSourceCache :: Word64 -> SourceDictCache -> Bool
 memberSourceCache x (SourceDictCache sdc) = Set.member x sdc
+
+sizeOfSourceCache :: SourceDictCache -> Int
+sizeOfSourceCache (SourceDictCache sdc) = Set.size sdc
