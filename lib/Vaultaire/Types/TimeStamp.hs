@@ -14,6 +14,7 @@ module Vaultaire.Types.TimeStamp
 (
     TimeStamp(..),
     convertToDiffTime,
+    convertToTimeStamp,
     getCurrentTimeNanoseconds
 ) where
 

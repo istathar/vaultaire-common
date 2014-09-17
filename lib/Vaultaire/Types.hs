@@ -23,6 +23,7 @@ module Vaultaire.Types
     -- * Time of a measurement
     TimeStamp(..),
     convertToDiffTime,
+    convertToTimeStamp,
     getCurrentTimeNanoseconds,
 
     -- * Namespacing and authentication
