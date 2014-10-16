@@ -41,7 +41,7 @@ instance Arbitrary Origin where
     arbitrary = Origin . S.pack . toLocator16a 6 <$> arbitrary `suchThat` (>0)
 
 instance Read Origin where
-  readsPrec _ = fmap (,"") . rights . (:[]) . makeOrigin . S.pack
+    readsPrec _ = fmap (,"") . rights . (:[]) . makeOrigin . S.pack
 
 instance Show Origin where
     show = S.unpack . unOrigin
