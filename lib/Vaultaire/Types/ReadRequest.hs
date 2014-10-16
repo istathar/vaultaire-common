@@ -22,13 +22,23 @@ import Data.Packer (getBytes, getWord64LE, getWord8, putBytes, putWord64LE,
                     putWord8, runPacking, tryUnpacking)
 import Data.Word (Word8)
 import Test.QuickCheck
+import Text.Printf
 import Vaultaire.Classes.WireFormat
 import Vaultaire.Types.Address
 import Vaultaire.Types.TimeStamp
 
 data ReadRequest = SimpleReadRequest Address TimeStamp TimeStamp
                  | ExtendedReadRequest Address TimeStamp TimeStamp
-  deriving (Eq, Show)
+  deriving (Eq)
+
+-- For use in debugging output in the reader daemon. Could use TimeStamp's Show
+-- instance, but that's in ISO8601, and we just want a Unix timestamp here.
+instance Show ReadRequest where
+    show (SimpleReadRequest   addr start end) = show addr ++ " (s) " ++ format start ++ " to " ++ format end
+    show (ExtendedReadRequest addr start end) = show addr ++ " (e) " ++ format start ++ " to " ++ format end
+
+format :: TimeStamp -> String
+format (TimeStamp t) = printf "%010d" (t `div` 1000000000)
 
 instance WireFormat ReadRequest where
     toWire (SimpleReadRequest addr start end) =
