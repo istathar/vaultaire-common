@@ -34,14 +34,17 @@ import Data.Either
 
 -- |Origin is a six-character ByteString representing a data origin.
 newtype Origin = Origin { unOrigin :: ByteString }
-    deriving (Eq, Ord, IsString, Hashable, Show)
+    deriving (Eq, Ord, IsString, Hashable)
 
 instance Arbitrary Origin where
     -- suchThat condition should be removed once locators package is fixed
     arbitrary = Origin . S.pack . toLocator16a 6 <$> arbitrary `suchThat` (>0)
 
 instance Read Origin where
-  readsPrec _ = fmap (,"") . rights . (:[]) . makeOrigin . S.pack
+    readsPrec _ = fmap (,"") . rights . (:[]) . makeOrigin . S.pack
+
+instance Show Origin where
+    show = S.unpack . unOrigin
 
 -- | Invalid origin Exception
 data BadOrigin = BadOrigin
