@@ -38,7 +38,8 @@ library
                      Vaultaire.Types.ContentsListBypass,
                      Vaultaire.Types.DayMap,
                      Vaultaire.Types.TimeStamp,
-                     Vaultaire.Types.PassThrough
+                     Vaultaire.Types.PassThrough,
+                     Vaultaire.Types.Telemetry
 
   build-depends:     base >=3 && <5,
                      bytestring,
