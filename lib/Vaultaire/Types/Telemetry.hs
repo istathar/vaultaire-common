@@ -10,7 +10,7 @@ import           Control.Applicative
 import           Control.Exception
 import           Control.Monad
 import           Data.ByteString (ByteString)
-import qualified Data.ByteString.Char8 as B8
+import qualified Data.ByteString.Char8 as S
 import           Data.Monoid
 import           Data.Packer
 import           Data.Word
@@ -63,7 +63,7 @@ data TeleMsgType
 
 
 chomp :: ByteString -> ByteString
-chomp = B8.takeWhile (/='\0')
+chomp = S.takeWhile (/='\0')
 
 -- | An agent ID has to fit in 64 characters and does not contain \NUL.
 agentID :: String -> Maybe AgentID
@@ -73,16 +73,16 @@ agentID s | length s <= 64 && not (any (=='\0') s)
 
 putAgentID :: AgentID -> Packing ()
 putAgentID (AgentID x)
-  = putBytes $ B8.pack $ x ++ take (64 - length x) (repeat '\0')
+  = putBytes $ S.pack $ x ++ take (64 - length x) (repeat '\0')
 
 getAgentID :: Unpacking AgentID
-getAgentID = AgentID . B8.unpack . chomp <$> getBytes 64
+getAgentID = AgentID . S.unpack . chomp <$> getBytes 64
 
 putTeleMsg :: TeleMsg -> Packing ()
 putTeleMsg x = do
     -- 8 bytes for the origin.
     let o = unOrigin $ _origin x
-    putBytes    $ B8.append o $ B8.pack $ take (8 - B8.length o) $ repeat '\0'
+    putBytes    $ S.append o $ S.pack $ take (8 - S.length o) $ repeat '\0'
     -- 8 bytes for the message type.
     putWord64LE $ fromIntegral $ fromEnum $ _type x
     -- 8 bytes for the payload
@@ -160,6 +160,7 @@ instance Show TeleMsgType where
   show ContentsUpdateLatency    = "contents-latency-update        "
   show ContentsEnumerateCeph    = "contents-latency-ceph-enumerate"
   show ContentsUpdateCeph       = "contents-latency-ceph-update   "
+
 instance Show TeleResp where
   show r = concat [ "teleresp:"
                   , " timestamp=", show $ _timestamp r
