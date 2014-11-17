@@ -34,6 +34,7 @@ suite = do
         prop "SourceDict" (wireId :: SourceDict -> Bool)
         prop "ReadRequest" (wireId :: ReadRequest -> Bool)
         prop "PassThrough" (wireId :: PassThrough -> Bool)
+        prop "TelemetryResponse" (wireId :: TeleResp -> Bool)
 
     describe "source dict wire format" $
         it "parses string to map" $ do
@@ -68,4 +69,3 @@ wireId op = id' op == op
   where
     id' = fromRight . fromWire . toWire
     fromRight = either (error . show) id
-

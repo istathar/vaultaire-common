@@ -24,13 +24,13 @@ import Control.Exception (Exception, SomeException (..))
 import Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as S
 import Data.Char
+import Data.Either
 import Data.Hashable (Hashable)
 import Data.Locator
 import Data.String (IsString)
 import Data.Typeable (Typeable)
 import Data.Word (Word64)
 import Test.QuickCheck
-import Data.Either
 
 -- |Origin is a six-character ByteString representing a data origin.
 newtype Origin = Origin { unOrigin :: ByteString }

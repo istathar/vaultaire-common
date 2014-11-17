@@ -67,6 +67,10 @@ module Vaultaire.Types
 
     -- * Internal
     DayMap(..),
+    TeleResp(..),
+    TeleMsg(..),
+    TeleMsgType(..),
+    AgentID, agentID,
 
     -- * Convenience/clarity
     Epoch,
@@ -85,5 +89,6 @@ import Vaultaire.Types.ReadRequest
 import Vaultaire.Types.ReadStream
 import Vaultaire.Types.SourceDict
 import Vaultaire.Types.SourceDictCache
+import Vaultaire.Types.Telemetry
 import Vaultaire.Types.TimeStamp
 import Vaultaire.Types.WriteResult
