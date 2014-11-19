@@ -170,5 +170,22 @@ instance Show TeleMsg where
   show m = concat [ show $ _origin m, " "
                   , show $ _type m,   " "
                   , let s = show (fromIntegral $ _payload m :: Int)
-                    in  take (8 - length s) (repeat ' ')
-                        ++ s ]
+                    in  take (8 - length s) (repeat ' ') ++ s
+                  , " "
+                  , showUnit $ _type m ]
+    where showUnit WriterSimplePoints       = "points"
+          showUnit WriterExtendedPoints     = "points"
+          showUnit WriterRequest            = "requests"
+          showUnit WriterRequestLatency     = "ms"
+          showUnit WriterCephLatency        = "ms"
+          showUnit ReaderSimplePoints       = "points"
+          showUnit ReaderExtendedPoints     = "points"
+          showUnit ReaderRequest            = "requests"
+          showUnit ReaderRequestLatency     = "ms"
+          showUnit ReaderCephLatency        = "ms"
+          showUnit ContentsEnumerate        = "requests"
+          showUnit ContentsUpdate           = "requests"
+          showUnit ContentsEnumerateLatency = "ms"
+          showUnit ContentsUpdateLatency    = "ms"
+          showUnit ContentsEnumerateCeph    = "ms"
+          showUnit ContentsUpdateCeph       = "ms"
