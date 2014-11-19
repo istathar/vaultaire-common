@@ -162,12 +162,13 @@ instance Show TeleMsgType where
   show ContentsUpdateCeph       = "contents-latency-ceph-update   "
 
 instance Show TeleResp where
-  show r = concat [ "teleresp:"
-                  , " timestamp=", show $ _timestamp r
-                  , " agent="    , show $ _aid r
-                  , show $ _msg r ]
+  show r = concat [ show $ _timestamp r, " "
+                  , show $ _aid r,       " "
+                  , show $ _msg r]
 
 instance Show TeleMsg where
-  show m = concat [ "origin=" , show $ _origin m
-                  , " type="   , show $ _type m
-                  , " payload=", show (fromIntegral $ _payload m :: Int) ]
+  show m = concat [ show $ _origin m, " "
+                  , show $ _type m,   " "
+                  , let s = show (fromIntegral $ _payload m :: Int)
+                    in  take (8 - length s) (repeat ' ')
+                        ++ s ]
