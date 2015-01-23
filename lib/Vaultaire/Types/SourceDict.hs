@@ -31,11 +31,11 @@ import Crypto.MAC.SipHash
 import Data.Attoparsec.Text (parseOnly)
 import qualified Data.Attoparsec.Text as PT
 import Data.HashMap.Strict (HashMap, difference, foldlWithKey', fromList,
-                            toList, lookup, union)
+                            lookup, toList, union)
 import Data.List (sortBy)
 import Data.Maybe (isNothing)
-import Data.Ord (comparing)
 import Data.Monoid (Monoid, mempty, (<>))
+import Data.Ord (comparing)
 import Data.Serialize
 import Data.Text (Text, find, pack, unpack)
 import Data.Text.Encoding (decodeUtf8', encodeUtf8)

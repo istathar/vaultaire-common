@@ -9,9 +9,9 @@ module Vaultaire.Types.SourceDictCache
 
 import Control.Applicative
 import Data.Packer
-import Data.Set(Set)
-import Data.Word
+import Data.Set (Set)
 import qualified Data.Set as Set
+import Data.Word
 
 import Vaultaire.Classes.WireFormat
 
@@ -26,7 +26,7 @@ instance WireFormat SourceDictCache where
     fromWire bs = Right $ SourceDictCache $ Set.fromList $ runUnpacking (many getWord64) bs
 
 emptySourceCache :: SourceDictCache
-emptySourceCache = SourceDictCache (Set.empty)
+emptySourceCache = SourceDictCache Set.empty
 
 insertSourceCache :: Word64 -> SourceDictCache -> SourceDictCache
 insertSourceCache x (SourceDictCache sdc) = SourceDictCache (Set.insert x sdc)

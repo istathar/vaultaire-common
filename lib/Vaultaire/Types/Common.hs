@@ -9,7 +9,7 @@
 
 {-# LANGUAGE DeriveDataTypeable         #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE TupleSections #-}
+{-# LANGUAGE TupleSections              #-}
 
 module Vaultaire.Types.Common
 (

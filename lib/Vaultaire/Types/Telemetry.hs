@@ -6,19 +6,19 @@ module Vaultaire.Types.Telemetry
      , AgentID, agentID )
 where
 
-import           Control.Applicative
-import           Control.Exception
-import           Control.Monad
-import           Data.ByteString (ByteString)
+import Control.Applicative
+import Control.Exception
+import Control.Monad
+import Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as S
-import           Data.Monoid
-import           Data.Packer
-import           Data.Word
-import           Test.QuickCheck
+import Data.Monoid
+import Data.Packer
+import Data.Word
+import Test.QuickCheck
 
-import           Vaultaire.Types.Common
-import           Vaultaire.Types.TimeStamp
-import           Vaultaire.Classes.WireFormat
+import Vaultaire.Classes.WireFormat
+import Vaultaire.Types.Common
+import Vaultaire.Types.TimeStamp
 
 
 
@@ -67,13 +67,13 @@ chomp = S.takeWhile (/='\0')
 
 -- | An agent ID has to fit in 64 characters and does not contain \NUL.
 agentID :: String -> Maybe AgentID
-agentID s | length s <= 64 && not (any (=='\0') s)
+agentID s | length s <= 64 && notElem '\0' s
           = Just $ AgentID s
           | otherwise = Nothing
 
 putAgentID :: AgentID -> Packing ()
 putAgentID (AgentID x)
-  = putBytes $ S.pack $ x ++ take (64 - length x) (repeat '\0')
+  = putBytes $ S.pack $ x ++ replicate (64 - length x) '\0'
 
 getAgentID :: Unpacking AgentID
 getAgentID = AgentID . S.unpack . chomp <$> getBytes 64
@@ -82,7 +82,7 @@ putTeleMsg :: TeleMsg -> Packing ()
 putTeleMsg x = do
     -- 8 bytes for the origin.
     let o = unOrigin $ _origin x
-    putBytes    $ S.append o $ S.pack $ take (8 - S.length o) $ repeat '\0'
+    putBytes    $ S.append o $ S.pack $ replicate (8 - S.length o) '\0'
     -- 8 bytes for the message type.
     putWord64LE $ fromIntegral $ fromEnum $ _type x
     -- 8 bytes for the payload
@@ -95,13 +95,12 @@ getTeleMsg = do
     p <- getWord64LE
     return $ fmap (\org -> TeleMsg org t p) o
 
-
 instance WireFormat AgentID where
   toWire   = runPacking 64 . putAgentID
   fromWire = tryUnpacking    getAgentID
 
 instance WireFormat TeleMsg where
-  toWire   = runPacking 16 . putTeleMsg
+  toWire   = runPacking 24 . putTeleMsg
   fromWire = runUnpacking getTeleMsg
 
 instance WireFormat TeleResp where
@@ -110,7 +109,7 @@ instance WireFormat TeleResp where
     putWord64LE $ unTimeStamp $ _timestamp x
     -- 64 bytes for the agent ID, padded out with nuls
     putAgentID  $ _aid x
-    -- 16 bytes for the message (type and payload)
+    -- 24 bytes for the message (origin, type and payload)
     putTeleMsg  $ _msg x
   fromWire x = join $ flip tryUnpacking x $ do
     s <- TimeStamp <$> getWord64LE
@@ -170,7 +169,7 @@ instance Show TeleMsg where
   show m = concat [ show $ _origin m, " "
                   , show $ _type m,   " "
                   , let s = show (fromIntegral $ _payload m :: Int)
-                    in  take (8 - length s) (repeat ' ') ++ s
+                    in  replicate (8 - length s) ' ' ++ s
                   , " "
                   , showUnit $ _type m ]
     where showUnit WriterSimplePoints       = "points"

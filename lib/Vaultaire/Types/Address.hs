@@ -8,7 +8,7 @@
 --
 
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE TupleSections #-}
+{-# LANGUAGE TupleSections              #-}
 
 module Vaultaire.Types.Address
 (
