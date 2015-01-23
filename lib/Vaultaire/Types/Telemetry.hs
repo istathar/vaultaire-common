@@ -95,13 +95,12 @@ getTeleMsg = do
     p <- getWord64LE
     return $ fmap (\org -> TeleMsg org t p) o
 
-
 instance WireFormat AgentID where
   toWire   = runPacking 64 . putAgentID
   fromWire = tryUnpacking    getAgentID
 
 instance WireFormat TeleMsg where
-  toWire   = runPacking 16 . putTeleMsg
+  toWire   = runPacking 24 . putTeleMsg
   fromWire = runUnpacking getTeleMsg
 
 instance WireFormat TeleResp where
@@ -110,7 +109,7 @@ instance WireFormat TeleResp where
     putWord64LE $ unTimeStamp $ _timestamp x
     -- 64 bytes for the agent ID, padded out with nuls
     putAgentID  $ _aid x
-    -- 16 bytes for the message (type and payload)
+    -- 24 bytes for the message (origin, type and payload)
     putTeleMsg  $ _msg x
   fromWire x = join $ flip tryUnpacking x $ do
     s <- TimeStamp <$> getWord64LE
