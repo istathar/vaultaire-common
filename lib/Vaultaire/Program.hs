@@ -37,19 +37,19 @@ import System.Posix.Signals
 
 interruptHandler :: MVar () -> Handler
 interruptHandler semaphore = Catch $ do
-    hPutStrLn stdout "\nInterrupt"
+    putStrLn "\nInterrupt"
     hFlush stdout
     putMVar semaphore ()
 
 terminateHandler :: MVar () -> Handler
 terminateHandler semaphore = Catch $ do
-    hPutStrLn stdout "Terminating"
+    putStrLn "Terminating"
     hFlush stdout
     putMVar semaphore ()
 
 quitHandler :: Handler
 quitHandler = Catch $ do
-    hPutStrLn stdout ""
+    putStrLn ""
     hFlush stdout
     logger <- getLogger rootLoggerName
     let level   = getLevel logger
@@ -102,7 +102,7 @@ initializeProgram banner verbosity = do
 
     _ <- installHandler sigINT  (interruptHandler quit) Nothing
     _ <- installHandler sigTERM (terminateHandler quit) Nothing
-    _ <- installHandler sigQUIT (quitHandler) Nothing
+    _ <- installHandler sigQUIT quitHandler Nothing
 
 
     debugM "Program.initialize" "Signal handlers installed"

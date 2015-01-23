@@ -2,11 +2,15 @@ cabal-version:       >= 1.10
 name:                vaultaire-common
 version:             2.8.2
 synopsis:            Common types and instances for Vaultaire
+description:         Defines a set of types, typeclasses and instances for
+                     Vaultaire, intended for use with Marquise and other
+                     Vaultaire related libraries and executables
 license:             BSD3
 author:              Anchor Engineering <engineering@anchor.com.au>
 maintainer:          Anchor Engineering <engineering@anchor.com.au>
-copyright:           © 2013-2014 Anchor Systems, Pty Ltd and Others
+copyright:           © 2013-2015 Anchor Systems, Pty Ltd and Others
 category:            Other
+license-file:        LICENSE
 tested-with:         GHC == 7.8.3
 stability:           experimental
 
@@ -61,7 +65,6 @@ library
                      siphash,
                      cereal
   ghc-options:       -O2
-                     -threaded
                      -Wall
                      -Wwarn
                      -fwarn-tabs

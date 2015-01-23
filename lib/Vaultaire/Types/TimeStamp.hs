@@ -8,7 +8,7 @@
 --
 
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE TupleSections #-}
+{-# LANGUAGE TupleSections              #-}
 
 module Vaultaire.Types.TimeStamp
 (
@@ -19,14 +19,14 @@ module Vaultaire.Types.TimeStamp
 ) where
 
 import Control.Applicative
+import Data.Maybe
 import Data.Packer (getWord64LE, putWord64LE, runPacking, tryUnpacking)
 import Data.Time.Calendar
 import Data.Time.Clock
 import Data.Time.Clock.POSIX
 import Data.Time.Format
-import Data.Maybe
-import System.Locale
 import Data.Word (Word64)
+import System.Locale
 import Test.QuickCheck
 
 import Vaultaire.Classes.WireFormat
@@ -48,15 +48,15 @@ import Vaultaire.Classes.WireFormat
 -- 1406848175274387000
 --
 -- There is a Read instance that is reasonably accommodating.
--- 
+--
 -- >>> read "2014-07-31T13:05:04.942089001Z" ::TimeStamp
 -- 2014-07-31T13:05:04.942089001Z
--- 
+--
 -- >>> read "1406811904.942089001" :: TimeStamp
 -- 2014-07-31T13:05:04.942089001Z
 --
 -- >>> read "1406811904" :: TimeStamp
--- 2014-07-31T13:05:04.000000000Z 
+-- 2014-07-31T13:05:04.000000000Z
 --
 newtype TimeStamp = TimeStamp {
     unTimeStamp :: Word64
@@ -65,11 +65,11 @@ newtype TimeStamp = TimeStamp {
 instance Show TimeStamp where
     show (TimeStamp t) =
       let
-        seconds = posixSecondsToUTCTime $ realToFrac $ (fromIntegral t / 1000000000 :: Rational)
+        seconds = posixSecondsToUTCTime $ realToFrac (fromIntegral t / 1000000000 :: Rational)
         iso8601 = formatTime defaultTimeLocale "%FT%T.%q" seconds
       in
         -- trim to nanoseconds
-        (take 29 iso8601) ++ "Z"
+        take 29 iso8601 ++ "Z"
 
 instance Read TimeStamp where
     readsPrec _ s = maybeToList $ (,"") <$> convertToTimeStamp <$> parse s
@@ -119,8 +119,7 @@ unixEpochDay = ModifiedJulianDay 40587
 convertToTimeStamp :: UTCTime -> TimeStamp
 convertToTimeStamp (UTCTime day secs) =
   let
-    mark = (diffDays day unixEpochDay) * secondsPerDay * 1000000000
-
+    mark = diffDays day unixEpochDay * secondsPerDay * 1000000000
     nano = floor $ (*1000000000) $ toRational secs
   in
     TimeStamp $ fromIntegral $ mark + nano
