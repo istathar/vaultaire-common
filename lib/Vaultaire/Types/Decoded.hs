@@ -13,9 +13,9 @@ import Vaultaire.Types.TimeStamp
 -- An 8 byte Address
 -- An 8 byte Timestamp (nanoseconds since Unix epoch)
 -- An 8 byte Payload
-data SimplePoint = SimplePoint { simpleAddress :: Address
-                               , simpleTime    :: TimeStamp
-                               , simplePayload :: Word64 }
+data SimplePoint = SimplePoint { simpleAddress :: {-# UNPACK #-} !Address
+                               , simpleTime    :: {-# UNPACK #-} !TimeStamp
+                               , simplePayload :: {-# UNPACK #-} !Word64 }
   deriving (Show, Eq)
 
 
