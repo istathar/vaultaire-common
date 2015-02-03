@@ -41,6 +41,7 @@ library
                      Vaultaire.Types.WriteResult,
                      Vaultaire.Types.ContentsListBypass,
                      Vaultaire.Types.DayMap,
+                     Vaultaire.Types.Decoded,
                      Vaultaire.Types.TimeStamp,
                      Vaultaire.Types.PassThrough,
                      Vaultaire.Types.Telemetry
