@@ -56,6 +56,10 @@ module Vaultaire.Types
     SimpleBurst(..),
     ExtendedBurst(..),
 
+    -- * Decoded reads
+    SimplePoint(..),
+    ExtendedPoint(..),
+
     -- * Writes
     WriteResult(..),
 
@@ -84,6 +88,7 @@ import Vaultaire.Types.ContentsListBypass
 import Vaultaire.Types.ContentsOperation
 import Vaultaire.Types.ContentsResponse
 import Vaultaire.Types.DayMap
+import Vaultaire.Types.Decoded
 import Vaultaire.Types.PassThrough
 import Vaultaire.Types.ReadRequest
 import Vaultaire.Types.ReadStream
