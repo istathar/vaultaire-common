@@ -32,7 +32,8 @@ import Data.Typeable (Typeable)
 import Data.Word (Word64)
 import Test.QuickCheck
 
--- |Origin is a six-character ByteString representing a data origin.
+-- |Origin is a ByteString representing a data origin. It must be
+--  between one and eight bytes.
 newtype Origin = Origin { unOrigin :: ByteString }
     deriving (Eq, Ord, IsString, Hashable)
 
@@ -56,6 +57,7 @@ makeOrigin :: ByteString -> Either SomeException Origin
 makeOrigin bs
     | S.null bs = Left (SomeException BadOrigin)
     | S.any (not . isAlphaNum) bs = Left (SomeException BadOrigin)
+    | S.length bs > 8 = Left (SomeException BadOrigin)
     | otherwise = Right (Origin bs)
 
 -- These can all be newtype wrapped as make work, perhaps excluding DayMap.
