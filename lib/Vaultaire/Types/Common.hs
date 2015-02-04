@@ -48,16 +48,16 @@ instance Show Origin where
     show = S.unpack . unOrigin
 
 -- | Invalid origin Exception
-data BadOrigin = BadOrigin
+data BadOrigin = NullOrigin | NonAlphaNumOrigin | OriginTooLong
     deriving (Show, Typeable)
 
 instance Exception BadOrigin
 
 makeOrigin :: ByteString -> Either SomeException Origin
 makeOrigin bs
-    | S.null bs = Left (SomeException BadOrigin)
-    | S.any (not . isAlphaNum) bs = Left (SomeException BadOrigin)
-    | S.length bs > 8 = Left (SomeException BadOrigin)
+    | S.null bs = Left (SomeException NullOrigin)
+    | S.any (not . isAlphaNum) bs = Left (SomeException NonAlphaNumOrigin)
+    | S.length bs > 8 = Left (SomeException OriginTooLong)
     | otherwise = Right (Origin bs)
 
 -- These can all be newtype wrapped as make work, perhaps excluding DayMap.
