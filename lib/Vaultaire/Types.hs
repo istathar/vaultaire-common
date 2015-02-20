@@ -74,6 +74,8 @@ module Vaultaire.Types
     TeleResp(..),
     TeleMsg(..),
     TeleMsgType(..),
+    TeleMsgUOM(..),
+    msgTypeUOM,
     AgentID, agentID,
 
     -- * Convenience/clarity
