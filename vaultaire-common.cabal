@@ -1,6 +1,6 @@
 cabal-version:       >= 1.10
 name:                vaultaire-common
-version:             2.8.4
+version:             2.9.0
 synopsis:            Common types and instances for Vaultaire
 description:         Defines a set of types, typeclasses and instances for
                      Vaultaire, intended for use with Marquise and other
