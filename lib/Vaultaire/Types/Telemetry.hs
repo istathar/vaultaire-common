@@ -3,6 +3,8 @@ module Vaultaire.Types.Telemetry
      ( TeleResp(..)
      , TeleMsg(..)
      , TeleMsgType(..)
+     , TeleMsgUOM(..)
+     , msgTypeUOM
      , AgentID, agentID )
 where
 
@@ -61,6 +63,34 @@ data TeleMsgType
    | ContentsUpdateCeph       -- ^ Mean Ceph latency for one update request
    deriving (Enum, Bounded, Eq, Ord)
 
+data TeleMsgUOM
+    = Points
+    | Requests
+    | Microseconds
+    deriving (Enum, Bounded, Eq, Ord)
+
+instance Show TeleMsgUOM where
+  show Points       = "points"
+  show Requests     = "requests"
+  show Microseconds = "ms"
+
+msgTypeUOM :: TeleMsgType -> TeleMsgUOM
+msgTypeUOM WriterSimplePoints       = Points
+msgTypeUOM WriterExtendedPoints     = Points
+msgTypeUOM WriterRequest            = Requests
+msgTypeUOM WriterRequestLatency     = Microseconds
+msgTypeUOM WriterCephLatency        = Microseconds
+msgTypeUOM ReaderSimplePoints       = Points
+msgTypeUOM ReaderExtendedPoints     = Points
+msgTypeUOM ReaderRequest            = Requests
+msgTypeUOM ReaderRequestLatency     = Microseconds
+msgTypeUOM ReaderCephLatency        = Microseconds
+msgTypeUOM ContentsEnumerate        = Requests
+msgTypeUOM ContentsUpdate           = Requests
+msgTypeUOM ContentsEnumerateLatency = Microseconds
+msgTypeUOM ContentsUpdateLatency    = Microseconds
+msgTypeUOM ContentsEnumerateCeph    = Microseconds
+msgTypeUOM ContentsUpdateCeph       = Microseconds
 
 chomp :: ByteString -> ByteString
 chomp = S.takeWhile (/='\0')
@@ -171,20 +201,4 @@ instance Show TeleMsg where
                   , let s = show (fromIntegral $ _payload m :: Int)
                     in  replicate (8 - length s) ' ' ++ s
                   , " "
-                  , showUnit $ _type m ]
-    where showUnit WriterSimplePoints       = "points"
-          showUnit WriterExtendedPoints     = "points"
-          showUnit WriterRequest            = "requests"
-          showUnit WriterRequestLatency     = "ms"
-          showUnit WriterCephLatency        = "ms"
-          showUnit ReaderSimplePoints       = "points"
-          showUnit ReaderExtendedPoints     = "points"
-          showUnit ReaderRequest            = "requests"
-          showUnit ReaderRequestLatency     = "ms"
-          showUnit ReaderCephLatency        = "ms"
-          showUnit ContentsEnumerate        = "requests"
-          showUnit ContentsUpdate           = "requests"
-          showUnit ContentsEnumerateLatency = "ms"
-          showUnit ContentsUpdateLatency    = "ms"
-          showUnit ContentsEnumerateCeph    = "ms"
-          showUnit ContentsUpdateCeph       = "ms"
+                  , show $ msgTypeUOM $ _type m ]
