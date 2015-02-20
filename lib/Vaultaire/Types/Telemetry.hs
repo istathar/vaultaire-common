@@ -72,7 +72,7 @@ data TeleMsgUOM
 instance Show TeleMsgUOM where
   show Points       = "points"
   show Requests     = "requests"
-  show Microseconds = "ms"
+  show Microseconds = "μs"
 
 msgTypeUOM :: TeleMsgType -> TeleMsgUOM
 msgTypeUOM WriterSimplePoints       = Points
