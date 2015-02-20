@@ -43,7 +43,7 @@ data TeleMsg = TeleMsg
      , _payload :: Word64
      } deriving Eq
 
--- | Telemetry types. All counts are absolute and all latencies are in microseconds.
+-- | Telemetry types. All counts are absolute and all latencies are in milliseconds.
 data TeleMsgType
    = WriterSimplePoints       -- ^ Total number of simple points written since last message
    | WriterExtendedPoints     -- ^ Total number of extended points written since last message
@@ -66,31 +66,31 @@ data TeleMsgType
 data TeleMsgUOM
     = Points
     | Requests
-    | Microseconds
+    | Milliseconds
     deriving (Enum, Bounded, Eq, Ord)
 
 instance Show TeleMsgUOM where
   show Points       = "points"
   show Requests     = "requests"
-  show Microseconds = "μs"
+  show Milliseconds = "ms"
 
 msgTypeUOM :: TeleMsgType -> TeleMsgUOM
 msgTypeUOM WriterSimplePoints       = Points
 msgTypeUOM WriterExtendedPoints     = Points
 msgTypeUOM WriterRequest            = Requests
-msgTypeUOM WriterRequestLatency     = Microseconds
-msgTypeUOM WriterCephLatency        = Microseconds
+msgTypeUOM WriterRequestLatency     = Milliseconds
+msgTypeUOM WriterCephLatency        = Milliseconds
 msgTypeUOM ReaderSimplePoints       = Points
 msgTypeUOM ReaderExtendedPoints     = Points
 msgTypeUOM ReaderRequest            = Requests
-msgTypeUOM ReaderRequestLatency     = Microseconds
-msgTypeUOM ReaderCephLatency        = Microseconds
+msgTypeUOM ReaderRequestLatency     = Milliseconds
+msgTypeUOM ReaderCephLatency        = Milliseconds
 msgTypeUOM ContentsEnumerate        = Requests
 msgTypeUOM ContentsUpdate           = Requests
-msgTypeUOM ContentsEnumerateLatency = Microseconds
-msgTypeUOM ContentsUpdateLatency    = Microseconds
-msgTypeUOM ContentsEnumerateCeph    = Microseconds
-msgTypeUOM ContentsUpdateCeph       = Microseconds
+msgTypeUOM ContentsEnumerateLatency = Milliseconds
+msgTypeUOM ContentsUpdateLatency    = Milliseconds
+msgTypeUOM ContentsEnumerateCeph    = Milliseconds
+msgTypeUOM ContentsUpdateCeph       = Milliseconds
 
 chomp :: ByteString -> ByteString
 chomp = S.takeWhile (/='\0')
