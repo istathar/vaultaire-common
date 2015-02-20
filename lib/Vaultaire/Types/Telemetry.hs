@@ -3,6 +3,8 @@ module Vaultaire.Types.Telemetry
      ( TeleResp(..)
      , TeleMsg(..)
      , TeleMsgType(..)
+     , TeleMsgUOM(..)
+     , msgTypeUOM
      , AgentID, agentID )
 where
 
@@ -41,7 +43,7 @@ data TeleMsg = TeleMsg
      , _payload :: Word64
      } deriving Eq
 
--- | Telemetry types. All counts are absolute and all latencies are in microseconds.
+-- | Telemetry types. All counts are absolute and all latencies are in milliseconds.
 data TeleMsgType
    = WriterSimplePoints       -- ^ Total number of simple points written since last message
    | WriterExtendedPoints     -- ^ Total number of extended points written since last message
@@ -61,6 +63,34 @@ data TeleMsgType
    | ContentsUpdateCeph       -- ^ Mean Ceph latency for one update request
    deriving (Enum, Bounded, Eq, Ord)
 
+data TeleMsgUOM
+    = Points
+    | Requests
+    | Milliseconds
+    deriving (Enum, Bounded, Eq, Ord)
+
+instance Show TeleMsgUOM where
+  show Points       = "points"
+  show Requests     = "requests"
+  show Milliseconds = "ms"
+
+msgTypeUOM :: TeleMsgType -> TeleMsgUOM
+msgTypeUOM WriterSimplePoints       = Points
+msgTypeUOM WriterExtendedPoints     = Points
+msgTypeUOM WriterRequest            = Requests
+msgTypeUOM WriterRequestLatency     = Milliseconds
+msgTypeUOM WriterCephLatency        = Milliseconds
+msgTypeUOM ReaderSimplePoints       = Points
+msgTypeUOM ReaderExtendedPoints     = Points
+msgTypeUOM ReaderRequest            = Requests
+msgTypeUOM ReaderRequestLatency     = Milliseconds
+msgTypeUOM ReaderCephLatency        = Milliseconds
+msgTypeUOM ContentsEnumerate        = Requests
+msgTypeUOM ContentsUpdate           = Requests
+msgTypeUOM ContentsEnumerateLatency = Milliseconds
+msgTypeUOM ContentsUpdateLatency    = Milliseconds
+msgTypeUOM ContentsEnumerateCeph    = Milliseconds
+msgTypeUOM ContentsUpdateCeph       = Milliseconds
 
 chomp :: ByteString -> ByteString
 chomp = S.takeWhile (/='\0')
@@ -171,20 +201,4 @@ instance Show TeleMsg where
                   , let s = show (fromIntegral $ _payload m :: Int)
                     in  replicate (8 - length s) ' ' ++ s
                   , " "
-                  , showUnit $ _type m ]
-    where showUnit WriterSimplePoints       = "points"
-          showUnit WriterExtendedPoints     = "points"
-          showUnit WriterRequest            = "requests"
-          showUnit WriterRequestLatency     = "ms"
-          showUnit WriterCephLatency        = "ms"
-          showUnit ReaderSimplePoints       = "points"
-          showUnit ReaderExtendedPoints     = "points"
-          showUnit ReaderRequest            = "requests"
-          showUnit ReaderRequestLatency     = "ms"
-          showUnit ReaderCephLatency        = "ms"
-          showUnit ContentsEnumerate        = "requests"
-          showUnit ContentsUpdate           = "requests"
-          showUnit ContentsEnumerateLatency = "ms"
-          showUnit ContentsUpdateLatency    = "ms"
-          showUnit ContentsEnumerateCeph    = "ms"
-          showUnit ContentsUpdateCeph       = "ms"
+                  , show $ msgTypeUOM $ _type m ]
