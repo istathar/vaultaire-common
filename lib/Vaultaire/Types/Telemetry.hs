@@ -22,8 +22,8 @@ import Vaultaire.Classes.WireFormat
 import Vaultaire.Types.Common
 import Vaultaire.Types.TimeStamp
 
-
-
+-- | ID string associated with a running daemon, so telemetry messages
+--   can be associated with the processes which sent them.
 newtype AgentID = AgentID String
         deriving (Eq, Ord, Monoid)
 
@@ -74,6 +74,7 @@ instance Show TeleMsgUOM where
   show Requests     = "requests"
   show Milliseconds = "ms"
 
+-- | Map a telemetry message type onto its associated UOM.
 msgTypeUOM :: TeleMsgType -> TeleMsgUOM
 msgTypeUOM WriterSimplePoints       = Points
 msgTypeUOM WriterExtendedPoints     = Points
@@ -92,6 +93,8 @@ msgTypeUOM ContentsUpdateLatency    = Milliseconds
 msgTypeUOM ContentsEnumerateCeph    = Milliseconds
 msgTypeUOM ContentsUpdateCeph       = Milliseconds
 
+-- | Return (possibly empty) prefix component of a ByteString terminated
+--   by one or more null bytes.
 chomp :: ByteString -> ByteString
 chomp = S.takeWhile (/='\0')
 
@@ -112,6 +115,8 @@ putAgentID (AgentID x)
 getAgentID :: Unpacking AgentID
 getAgentID = AgentID . S.unpack . chomp <$> getBytes 64
 
+-- | Pack a telemetry message. Assumes the origin is no longer than
+--   eight bytes.
 putTeleMsg :: TeleMsg -> Packing ()
 putTeleMsg x = do
     -- 8 bytes for the origin.
