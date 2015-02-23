@@ -76,7 +76,7 @@ module Vaultaire.Types
     TeleMsgType(..),
     TeleMsgUOM(..),
     msgTypeUOM,
-    AgentID, agentID,
+    AgentID, agentIDLength, agentID,
 
     -- * Convenience/clarity
     Epoch,

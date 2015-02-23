@@ -5,7 +5,7 @@ module Vaultaire.Types.Telemetry
      , TeleMsgType(..)
      , TeleMsgUOM(..)
      , msgTypeUOM
-     , AgentID, agentID )
+     , AgentID, agentIDLength, agentID )
 where
 
 import Control.Applicative
@@ -22,8 +22,8 @@ import Vaultaire.Classes.WireFormat
 import Vaultaire.Types.Common
 import Vaultaire.Types.TimeStamp
 
-
-
+-- | ID string associated with a running daemon, so telemetry messages
+--   can be associated with the processes which sent them.
 newtype AgentID = AgentID String
         deriving (Eq, Ord, Monoid)
 
@@ -74,6 +74,7 @@ instance Show TeleMsgUOM where
   show Requests     = "requests"
   show Milliseconds = "ms"
 
+-- | Map a telemetry message type onto its associated UOM.
 msgTypeUOM :: TeleMsgType -> TeleMsgUOM
 msgTypeUOM WriterSimplePoints       = Points
 msgTypeUOM WriterExtendedPoints     = Points
@@ -92,22 +93,30 @@ msgTypeUOM ContentsUpdateLatency    = Milliseconds
 msgTypeUOM ContentsEnumerateCeph    = Milliseconds
 msgTypeUOM ContentsUpdateCeph       = Milliseconds
 
+-- | Return (possibly empty) prefix component of a ByteString terminated
+--   by one or more null bytes.
 chomp :: ByteString -> ByteString
 chomp = S.takeWhile (/='\0')
 
+-- | Agent IDs are a maximum of 64 bytes.
+agentIDLength :: Int
+agentIDLength = 64
+
 -- | An agent ID has to fit in 64 characters and does not contain \NUL.
 agentID :: String -> Maybe AgentID
-agentID s | length s <= 64 && notElem '\0' s
+agentID s | length s <= agentIDLength && notElem '\0' s
           = Just $ AgentID s
           | otherwise = Nothing
 
 putAgentID :: AgentID -> Packing ()
 putAgentID (AgentID x)
-  = putBytes $ S.pack $ x ++ replicate (64 - length x) '\0'
+  = putBytes $ S.pack $ x ++ replicate (agentIDLength - length x) '\0'
 
 getAgentID :: Unpacking AgentID
-getAgentID = AgentID . S.unpack . chomp <$> getBytes 64
+getAgentID = AgentID . S.unpack . chomp <$> getBytes agentIDLength
 
+-- | Pack a telemetry message. Assumes the origin is no longer than
+--   eight bytes.
 putTeleMsg :: TeleMsg -> Packing ()
 putTeleMsg x = do
     -- 8 bytes for the origin.
@@ -126,7 +135,7 @@ getTeleMsg = do
     return $ fmap (\org -> TeleMsg org t p) o
 
 instance WireFormat AgentID where
-  toWire   = runPacking 64 . putAgentID
+  toWire   = runPacking agentIDLength . putAgentID
   fromWire = tryUnpacking    getAgentID
 
 instance WireFormat TeleMsg where
