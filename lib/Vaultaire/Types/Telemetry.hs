@@ -5,7 +5,7 @@ module Vaultaire.Types.Telemetry
      , TeleMsgType(..)
      , TeleMsgUOM(..)
      , msgTypeUOM
-     , AgentID, agentID )
+     , AgentID, agentIDLength, agentID )
 where
 
 import Control.Applicative
@@ -95,9 +95,13 @@ msgTypeUOM ContentsUpdateCeph       = Milliseconds
 chomp :: ByteString -> ByteString
 chomp = S.takeWhile (/='\0')
 
+-- | Agent IDs are a maximum of 64 bytes.
+agentIDLength :: Int
+agentIDLength = 64
+
 -- | An agent ID has to fit in 64 characters and does not contain \NUL.
 agentID :: String -> Maybe AgentID
-agentID s | length s <= 64 && notElem '\0' s
+agentID s | length s <= agentIDLength && notElem '\0' s
           = Just $ AgentID s
           | otherwise = Nothing
 
