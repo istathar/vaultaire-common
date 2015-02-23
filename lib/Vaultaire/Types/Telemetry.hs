@@ -110,10 +110,10 @@ agentID s | length s <= agentIDLength && notElem '\0' s
 
 putAgentID :: AgentID -> Packing ()
 putAgentID (AgentID x)
-  = putBytes $ S.pack $ x ++ replicate (64 - length x) '\0'
+  = putBytes $ S.pack $ x ++ replicate (agentIDLength - length x) '\0'
 
 getAgentID :: Unpacking AgentID
-getAgentID = AgentID . S.unpack . chomp <$> getBytes 64
+getAgentID = AgentID . S.unpack . chomp <$> getBytes agentIDLength
 
 -- | Pack a telemetry message. Assumes the origin is no longer than
 --   eight bytes.
@@ -135,7 +135,7 @@ getTeleMsg = do
     return $ fmap (\org -> TeleMsg org t p) o
 
 instance WireFormat AgentID where
-  toWire   = runPacking 64 . putAgentID
+  toWire   = runPacking agentIDLength . putAgentID
   fromWire = tryUnpacking    getAgentID
 
 instance WireFormat TeleMsg where
