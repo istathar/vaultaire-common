@@ -45,7 +45,7 @@ import Test.QuickCheck
 import Vaultaire.Classes.WireFormat
 
 newtype SourceDict = SourceDict { unSourceDict :: HashMap Text Text }
-  deriving (Show, Eq, Monoid)
+  deriving (Eq, Monoid)
 
 makeSourceDict :: HashMap Text Text -> Either String SourceDict
 makeSourceDict hm = if foldlWithKey' allGoodKV True hm
@@ -54,6 +54,9 @@ makeSourceDict hm = if foldlWithKey' allGoodKV True hm
                               \ no ',' or ':' allowed."
   where allGoodKV acc k v = acc && (allGoodChars k && allGoodChars v)
         allGoodChars = isNothing . find (\c -> c == ':' || c == ',')
+
+instance Show SourceDict where
+  show (SourceDict sd) = "dict=" <> show (toList sd)
 
 instance WireFormat SourceDict where
     fromWire bs = either (Left . SomeException) parse (decodeUtf8' bs)
