@@ -75,7 +75,7 @@ instance Read TimeStamp where
     readsPrec _ s = maybeToList $ (,"") <$> convertToTimeStamp <$> parse s
       where
         parse :: String -> Maybe UTCTime
-        parse x =   parseTime defaultTimeLocale "%FT%T%QZ" x
+        parse x =   parseTime defaultTimeLocale "%FT%T%Q%Z" x
                 <|> parseTime defaultTimeLocale "%F" x
                 <|> parseTime defaultTimeLocale "%s%Q" x
 
