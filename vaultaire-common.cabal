@@ -65,8 +65,7 @@ library
                      locators >= 0.2.4,
                      siphash,
                      cereal
-  ghc-options:       -O2
-                     -Wall
+  ghc-options:       -Wall
                      -Wwarn
                      -fwarn-tabs
 
@@ -89,8 +88,7 @@ test-suite           wire-formats-test
                      bytestring,
                      vaultaire-common
 
-  ghc-options:       -O2
-                     -threaded
+  ghc-options:       -threaded
                      -Wall
                      -Wwarn
                      -fwarn-tabs
@@ -105,8 +103,7 @@ test-suite           instance-test
                      hspec,
                      vaultaire-common
 
-  ghc-options:       -O2
-                     -threaded
+  ghc-options:       -threaded
                      -Wall
                      -Wwarn
                      -fwarn-tabs
