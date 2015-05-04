@@ -14,7 +14,7 @@
 
 module Vaultaire.Types.SourceDict
 (
-    SourceDict,
+    SourceDict(..),
     unionSource,
     diffSource,
     lookupSource,

@@ -31,7 +31,7 @@ module Vaultaire.Types
     makeOrigin,
 
     -- * Metadata about sources
-    SourceDict,
+    SourceDict(..),
     unionSource,
     diffSource,
     lookupSource,
